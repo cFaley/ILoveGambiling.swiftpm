@@ -52,7 +52,7 @@ struct Slots: View {
                         .foregroundStyle(.black)
                 }
             }
-            
+            Text("$100")
         }
     }
 

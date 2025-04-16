@@ -59,12 +59,12 @@ struct Slots: View {
     func Spin() {
         Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { timer in
             let randomNumber = Int.random(in: 1...20)
-            print("Number: \(randomNumber)")
+//            print("Number: \(randomNumber)")
 
             DispatchQueue.main.async {
-                self.slot1 = Int.random(in: 1..<4)
-                self.slot2 = Int.random(in: 1..<4)
-                self.slot3 = Int.random(in: 1..<4)
+                self.slot1 = Int.random(in: 1..<7)
+                self.slot2 = Int.random(in: 1..<7)
+                self.slot3 = Int.random(in: 1..<7)
             }
 
             if randomNumber == 10 {

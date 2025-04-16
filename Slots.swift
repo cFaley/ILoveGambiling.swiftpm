@@ -13,19 +13,26 @@ struct Slots: View {
                 ZStack{
                     Rectangle()
                         .foregroundStyle(.gray)
-                    Text("\(slot1)")
+//                    Text("\(slot1)")
+                    Image("Image\(slot1)")
+                        .resizable()
+                    
                 }
                 .frame(width: 100, height: 200, alignment: .leading)
                 ZStack{
                     Rectangle()
                         .foregroundStyle(.gray)
-                    Text("\(slot2)")
+//                    Text("\(slot2)")
+                    Image("Image\(slot2)")
+                        .resizable()
                 }
                 .frame(width: 100, height: 200, alignment: .center)
                 ZStack{
                     Rectangle()
                         .foregroundStyle(.gray)
-                    Text("\(slot3)")
+//                    Text("\(slot3)")
+                    Image("Image\(slot3)")
+                        .resizable()
                 }
                 .frame(width: 100, height: 200, alignment: .trailing)
             }

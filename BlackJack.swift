@@ -13,8 +13,8 @@ struct BlackJack: View {
     @State var dealerCards: [Card] = []
     @State var gameMessage: String = "Welcome to Blackjack!"
     @State var gameOver: Bool = false
-    @State var cashMoney: Int = 0
     @State var playerBet: Int = 0
+    @State var cash = 5000
     var body: some View {
         VStack(spacing: 20) {
             Text("Blackjack")
@@ -23,6 +23,7 @@ struct BlackJack: View {
             Text(gameMessage)
                 .padding()
             
+            Text("Cash $\(cash)")
             VStack {
                 HStack{
                     Text("Your Hand:")
@@ -57,25 +58,20 @@ struct BlackJack: View {
 
             HStack {
                 Text("Select a bet:")
-                Button("$5") {
-                    drawCard(for: &playerCards)
-                    checkGameOver()
-                }
-                Button("$10") {
-                    drawCard(for: &playerCards)
-                    checkGameOver()
-                }
-                Button("$25") {
-                    drawCard(for: &playerCards)
-                    checkGameOver()
-                }
                 Button("$50") {
-                    drawCard(for: &playerCards)
-                    checkGameOver()
+                    cash -= 50
                 }
                 Button("$100") {
-                    drawCard(for: &playerCards)
-                    checkGameOver()
+                    cash -= 100
+                }
+                Button("$250") {
+                    cash -= 250
+                }
+                Button("$500") {
+                    cash -= 500
+                }
+                Button("$1000") {
+                    cash -= 1000
                 }
             }
             Button("Next hand") {

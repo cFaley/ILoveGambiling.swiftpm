@@ -13,19 +13,26 @@ struct Slots: View {
                 ZStack{
                     Rectangle()
                         .foregroundStyle(.gray)
-                    Text("\(slot1)")
+//                    Text("\(slot1)")
+                    Image("Image\(slot1)")
+                        .resizable()
+                    
                 }
                 .frame(width: 100, height: 200, alignment: .leading)
                 ZStack{
                     Rectangle()
                         .foregroundStyle(.gray)
-                    Text("\(slot2)")
+//                    Text("\(slot2)")
+                    Image("Image\(slot2)")
+                        .resizable()
                 }
                 .frame(width: 100, height: 200, alignment: .center)
                 ZStack{
                     Rectangle()
                         .foregroundStyle(.gray)
-                    Text("\(slot3)")
+//                    Text("\(slot3)")
+                    Image("Image\(slot3)")
+                        .resizable()
                 }
                 .frame(width: 100, height: 200, alignment: .trailing)
             }
@@ -45,19 +52,19 @@ struct Slots: View {
                         .foregroundStyle(.black)
                 }
             }
-            
+            Text("$100")
         }
     }
 
     func Spin() {
         Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { timer in
             let randomNumber = Int.random(in: 1...20)
-            print("Number: \(randomNumber)")
+//            print("Number: \(randomNumber)")
 
             DispatchQueue.main.async {
-                self.slot1 = Int.random(in: 1..<4)
-                self.slot2 = Int.random(in: 1..<4)
-                self.slot3 = Int.random(in: 1..<4)
+                self.slot1 = Int.random(in: 1..<7)
+                self.slot2 = Int.random(in: 1..<7)
+                self.slot3 = Int.random(in: 1..<7)
             }
 
             if randomNumber == 10 {

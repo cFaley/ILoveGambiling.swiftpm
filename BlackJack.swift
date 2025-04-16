@@ -13,6 +13,8 @@ struct BlackJack: View {
     @State var dealerCards: [Card] = []
     @State var gameMessage: String = "Welcome to Blackjack!"
     @State var gameOver: Bool = false
+    @State var cashMoney: Int = 0
+    @State var playerBet: Int = 0
     var body: some View {
         VStack(spacing: 20) {
             Text("Blackjack")
@@ -22,7 +24,10 @@ struct BlackJack: View {
                 .padding()
             
             VStack {
-                Text("Your Hand:")
+                HStack{
+                    Text("Your Hand:")
+                    Text("0392")
+                }
                 HStack {
                     ForEach(playerCards) { card in
                         cardView(card: card)
@@ -30,7 +35,10 @@ struct BlackJack: View {
                 }
             }
             VStack {
-                Text("Dealer's Hand:")
+                HStack{
+                    Text("Dealer's Hand:")
+                    Text("0392")
+                }
                 HStack {
                     ForEach(dealerCards) { card in
                         cardView(card: card)
@@ -46,12 +54,36 @@ struct BlackJack: View {
                     dealerTurn()
                 }
             }
-            Button("Restart Game") {
-                restartGame()
+
+            HStack {
+                Text("Select a bet:")
+                Button("$5") {
+                    drawCard(for: &playerCards)
+                    checkGameOver()
+                }
+                Button("$10") {
+                    drawCard(for: &playerCards)
+                    checkGameOver()
+                }
+                Button("$25") {
+                    drawCard(for: &playerCards)
+                    checkGameOver()
+                }
+                Button("$50") {
+                    drawCard(for: &playerCards)
+                    checkGameOver()
+                }
+                Button("$100") {
+                    drawCard(for: &playerCards)
+                    checkGameOver()
+                }
+            }
+            Button("Next hand") {
+                nextHand()
             }
         }
         .onAppear {
-            restartGame()
+            nextHand()
         }
     }
     
@@ -129,7 +161,7 @@ struct BlackJack: View {
         gameOver = true
     }
     
-    func restartGame() {
+    func nextHand() {
         playerCards = []
         dealerCards = []
         gameMessage = "New game started!"

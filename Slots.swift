@@ -7,6 +7,7 @@ struct Slots: View {
 //    @State var IsSpinning = true
 //    @State var count = 0
     @State var cash = 5000
+    @State var canSpin = true
     var body: some View {
         VStack {
             Text("Cash $\(cash)")
@@ -44,8 +45,12 @@ struct Slots: View {
                 //                slot1 = Int.random(in: 1..<4)
                 //                slot2 = Int.random(in: 1..<4)
                 //                slot3 = Int.random(in: 1..<4)
-                cash -= 100
-                Spin()
+                if canSpin == true{
+                    
+                    
+                    cash -= 100
+                    Spin()
+                }
                 //                                IsSpinning = false
                 
             } label: {
@@ -102,6 +107,7 @@ struct Slots: View {
 //            print("Number: \(randomNumber)")
 
             DispatchQueue.main.async {
+                self.canSpin = false
                 self.slot1 = Int.random(in: 1..<7)
                 self.slot2 = Int.random(in: 1..<7)
                 self.slot3 = Int.random(in: 1..<7)
@@ -109,7 +115,9 @@ struct Slots: View {
 
             if randomNumber == 10 {
                 DispatchQueue.main.async {
+                    self.canSpin = true
                     self.AddMoney()
+                    
                 }
                 timer.invalidate()
             }

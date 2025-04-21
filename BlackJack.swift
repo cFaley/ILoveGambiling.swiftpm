@@ -9,12 +9,17 @@ struct Card: Identifiable {
 }
 
 struct BlackJack: View {
+    
+    enum GamePhase { case betting, playing, handOver }
+
+    @State var gamePhase: GamePhase = .betting
+    @State var selectedBet: Int?    = nil
+    @State var cash: Int = 5000
     @State var playerCards: [Card] = []
     @State var dealerCards: [Card] = []
     @State var gameMessage: String = "Welcome to Blackjack!"
     @State var gameOver: Bool = false
     @State var playerBet: Int = 0
-    @State var cash: Int = 5000
     @State var dealerTotal: Int = 0
     @State var playerTotal: Int = 0
     var body: some View {
@@ -50,7 +55,7 @@ struct BlackJack: View {
             }
             HStack {
                 Button("Hit") {
-                    drawCard(for: &playerCards)
+                   hit()
                     checkGameOver()
                 }
                 Button("Stand") {
@@ -62,23 +67,23 @@ struct BlackJack: View {
                 Text("Select a bet:")
                 Button("$50") {
                     cash -= 50
-                    drawCard(for: &playerCards)
+                    hit()
                 }
                 Button("$100") {
                     cash -= 100
-                    drawCard(for: &playerCards)
+                    hit()
                 }
                 Button("$250") {
                     cash -= 250
-                    drawCard(for: &playerCards)
+                    hit()
                 }
                 Button("$500") {
                     cash -= 500
-                    drawCard(for: &playerCards)
+                    hit()
                 }
                 Button("$1000") {
                     cash -= 1000
-                    drawCard(for: &playerCards)
+                    hit()
                 }
             }
             Button("Next hand") {
@@ -128,28 +133,36 @@ struct BlackJack: View {
         default: return ""
         }
     }
-    func drawCard(for hand: inout [Card]) {
-        let cardValue = Int.random(in: 1...13)
-        let suit = ["hearts", "diamonds", "clubs", "spades"].randomElement()!
-        let card = Card(
-            value: cardValue > 10 ? 10 : cardValue,
-            suit: suit,
-            isFaceCard: cardValue > 10,
-            isAce: cardValue == 1
-        )
-        hand.append(card)
-        adjustAces(hand: &hand)
-    }
-    
-    func adjustAces(hand: inout [Card]) {
-        var total = hand.reduce(0, { $0 + $1.value })
-        for i in 0..<hand.count {
-            if total > 21 && hand[i].isAce && hand[i].value == 11 {
-                hand[i].value = 1
-                total -= 10
+    func hit() {
+            drawCard(into: &playerCards)
+            if total(of: playerCards) > 21 {
+                gameMessage = "Busted! Dealer wins."
+                gamePhase = .handOver
             }
         }
-    }
+    
+    func drawCard(into hand: inout [Card]) {
+            let raw = Int.random(in: 1...13)
+            let card = Card(
+                value: raw > 10 ? 10 : raw,
+                suit: ["hearts","diamonds","clubs","spades"].randomElement()!,
+                isFaceCard: raw > 10,
+                isAce: raw == 1
+            )
+            hand.append(card)
+            adjustAces(in: &hand)
+        }
+    func adjustAces(in hand: inout [Card]) {
+            var t = total(of: hand)
+            for idx in hand.indices where t > 21 && hand[idx].isAce && hand[idx].value == 11 {
+                hand[idx].value = 1
+                t -= 10
+            }
+        }
+    
+    func total(of hand: [Card]) -> Int {
+           hand.reduce(0) { $0 + $1.value }
+       }
     
     func checkGameOver() {
         let playerTotal = playerCards.reduce(0, { $0 + $1.value })
@@ -164,7 +177,7 @@ struct BlackJack: View {
     
     func dealerTurn() {
         while dealerCards.reduce(0, { $0 + $1.value }) < 17 {
-            drawCard(for: &dealerCards)
+            hit()
         }
         let dealerTotal = dealerCards.reduce(0, { $0 + $1.value })
         let playerTotal = playerCards.reduce(0, { $0 + $1.value })
@@ -184,8 +197,5 @@ struct BlackJack: View {
         dealerCards = []
         gameMessage = "New game started!"
         gameOver = false
-        drawCard(for: &playerCards)
-        drawCard(for: &playerCards)
-        drawCard(for: &dealerCards)
     }
 }

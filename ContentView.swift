@@ -28,7 +28,17 @@ struct ContentView: View {
                         
                     }
                 }
-                
+                NavigationLink(destination: Poker()) {
+                    ZStack{
+                        
+                        RoundedRectangle(cornerRadius: 100)
+                            .frame(width: 300, height: 100, alignment: .center)
+                        Text("Poker")
+                            .font(.largeTitle)
+                            .foregroundStyle(.black)
+                        
+                    }
+                }
             }
         }
     }

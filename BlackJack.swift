@@ -14,7 +14,9 @@ struct BlackJack: View {
     @State var gameMessage: String = "Welcome to Blackjack!"
     @State var gameOver: Bool = false
     @State var playerBet: Int = 0
-    @State var cash = 5000
+    @State var cash: Int = 5000
+    @State var dealerTotal: Int = 0
+    @State var playerTotal: Int = 0
     var body: some View {
         VStack(spacing: 20) {
             Text("Blackjack")
@@ -27,7 +29,7 @@ struct BlackJack: View {
             VStack {
                 HStack{
                     Text("Your Hand:")
-                    Text("0392")
+                    Text("\(playerTotal)")
                 }
                 HStack {
                     ForEach(playerCards) { card in
@@ -38,7 +40,7 @@ struct BlackJack: View {
             VStack {
                 HStack{
                     Text("Dealer's Hand:")
-                    Text("0392")
+                    Text("\(dealerTotal)")
                 }
                 HStack {
                     ForEach(dealerCards) { card in
@@ -60,18 +62,23 @@ struct BlackJack: View {
                 Text("Select a bet:")
                 Button("$50") {
                     cash -= 50
+                    drawCard(for: &playerCards)
                 }
                 Button("$100") {
                     cash -= 100
+                    drawCard(for: &playerCards)
                 }
                 Button("$250") {
                     cash -= 250
+                    drawCard(for: &playerCards)
                 }
                 Button("$500") {
                     cash -= 500
+                    drawCard(for: &playerCards)
                 }
                 Button("$1000") {
                     cash -= 1000
+                    drawCard(for: &playerCards)
                 }
             }
             Button("Next hand") {
@@ -91,7 +98,12 @@ struct BlackJack: View {
                 .border(Color.black, width: 2)
             VStack {
                 Text(cardDisplayValue(card))
-                    .font(.title)
+                    .font(.headline)
+                    .foregroundColor(card.suit == "hearts" || card.suit == "diamonds" ? .red : .black)
+                Image(systemName: suitImage(card.suit))
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 15, height: 15)
                     .foregroundColor(card.suit == "hearts" || card.suit == "diamonds" ? .red : .black)
             }
         }
@@ -104,6 +116,16 @@ struct BlackJack: View {
             return "A"
         } else {
             return String(card.value)
+        }
+    }
+    
+    func suitImage(_ suit: String) -> String {
+        switch suit {
+        case "hearts": return "suit.heart.fill"
+        case "diamonds": return "suit.diamond.fill"
+        case "clubs": return "suit.club.fill"
+        case "spades": return "suit.spade.fill"
+        default: return ""
         }
     }
     func drawCard(for hand: inout [Card]) {

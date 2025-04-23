@@ -58,42 +58,41 @@ struct BlackJack: View {
                     hit()
                 }
                 .disabled(gamePhase != .playing)
-
+                
                 Button("Stand") {
                     stand()
                 }
                 .disabled(gamePhase != .playing)
-
             }
             
             HStack {
                 Text("Select a bet:")
                 Button("$50") {
-                    cash -= 50
-                    hit()
-                    hit()
+                    place(bet: 50)
+                    dealInitialCards()
                 }
+                .disabled(gamePhase != .betting)
                 Button("$100") {
-                    cash -= 100
-                    hit()
-                    hit()
+                    place(bet: 100)
+                    dealInitialCards()
                 }
+                .disabled(gamePhase != .betting)
                 Button("$250") {
-                    cash -= 250
-                    hit()
-                    hit()
+                    place(bet: 250)
+                    dealInitialCards()
                 }
+                .disabled(gamePhase != .betting)
                 Button("$500") {
-                    cash -= 500
-                    hit()
-                    hit()
+                    place(bet: 500)
+                    dealInitialCards()
                 }
+                .disabled(gamePhase != .betting)
                 Button("$1000") {
-                    cash -= 1000
-                    hit()
-                    hit()
+                    place(bet: 1000)
+                    dealInitialCards()
                 }
             }
+            .disabled(gamePhase != .betting)
             Button("Next hand") {
                 nextHand()
             }
@@ -143,10 +142,45 @@ struct BlackJack: View {
     }
     func hit() {
         drawCard(into: &playerCards)
-        if total(of: playerCards) > 21 {
-            gameMessage = "Busted! Dealer wins."
+        playerTotal = total(of: playerCards)
+        if playerTotal > 21 {
+            gameMessage = "Busted!"
             gamePhase = .handOver
         }
+    }
+    
+    func stand() {
+        while total(of: dealerCards) < 17 {
+            drawCard(into: &dealerCards)
+        }
+        let playerTotal = total(of: playerCards)
+        let dealerTotal = total(of: dealerCards)
+        
+        if dealerTotal > 21 || playerTotal > dealerTotal {
+            gameMessage = "You win!"
+        } else {
+            gameMessage = "Dealer wins."
+        }
+        gamePhase = .handOver
+    }
+    
+    func dealInitialCards() {
+        playerCards.removeAll()
+        dealerCards.removeAll()
+        
+        drawCard(into: &playerCards)
+        drawCard(into: &playerCards)
+        drawCard(into: &dealerCards)
+        
+        playerTotal = total(of: playerCards)
+        dealerTotal = total(of: dealerCards)
+    }
+    
+    func place(bet amount: Int) {
+        selectedBet = amount
+        cash -= amount
+        dealInitialCards()
+        gamePhase = .playing
     }
     
     func drawCard(into hand: inout [Card]) {
@@ -160,6 +194,7 @@ struct BlackJack: View {
         hand.append(card)
         adjustAces(in: &hand)
     }
+    
     func adjustAces(in hand: inout [Card]) {
         var t = total(of: hand)
         for idx in hand.indices where t > 21 && hand[idx].isAce && hand[idx].value == 11 {
@@ -182,21 +217,6 @@ struct BlackJack: View {
             gameOver = true
         }
     }
-    
-    func stand() {
-            while total(of: dealerCards) < 17 {
-                drawCard(into: &dealerCards)
-            }
-            let playerTotal = total(of: playerCards)
-            let dealerTotal = total(of: dealerCards)
-
-            if dealerTotal > 21 || playerTotal > dealerTotal {
-                gameMessage = "You win!"
-            } else {
-                gameMessage = "Dealer wins."
-            }
-            gamePhase = .handOver
-        }
     
     func nextHand() {
         selectedBet = nil

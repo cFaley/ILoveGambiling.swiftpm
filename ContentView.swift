@@ -5,6 +5,8 @@ struct ContentView: View {
         VStack {
             
             Text("I Love Gambling❤️")
+                .padding()
+            Text("Welcom to the CCC!!!")
             NavigationStack{
                 NavigationLink(destination: Slots()) {
                     ZStack{

@@ -11,7 +11,7 @@ struct Card: Identifiable {
 struct BlackJack: View {
     
     enum GamePhase { case betting, playing, handOver }
-
+    
     @State var gamePhase: GamePhase = .betting
     @State var selectedBet: Int?    = nil
     @State var cash: Int = 5000
@@ -55,34 +55,39 @@ struct BlackJack: View {
             }
             HStack {
                 Button("Hit") {
-                   hit()
+                    hit()
                     checkGameOver()
                 }
                 Button("Stand") {
                     dealerTurn()
                 }
             }
-
+            
             HStack {
                 Text("Select a bet:")
                 Button("$50") {
                     cash -= 50
                     hit()
+                    hit()
                 }
                 Button("$100") {
                     cash -= 100
+                    hit()
                     hit()
                 }
                 Button("$250") {
                     cash -= 250
                     hit()
+                    hit()
                 }
                 Button("$500") {
                     cash -= 500
                     hit()
+                    hit()
                 }
                 Button("$1000") {
                     cash -= 1000
+                    hit()
                     hit()
                 }
             }
@@ -134,12 +139,12 @@ struct BlackJack: View {
         }
     }
     func hit() {
-            drawCard(into: &playerCards)
-            if total(of: playerCards) > 21 {
-                gameMessage = "Busted! Dealer wins."
-                gamePhase = .handOver
-            }
+        drawCard(into: &playerCards)
+        if total(of: playerCards) > 21 {
+            gameMessage = "Busted! Dealer wins."
+            gamePhase = .handOver
         }
+    }
     
     func drawCard(into hand: inout [Card]) {
             let raw = Int.random(in: 1...13)
@@ -153,16 +158,16 @@ struct BlackJack: View {
             adjustAces(in: &hand)
         }
     func adjustAces(in hand: inout [Card]) {
-            var t = total(of: hand)
-            for idx in hand.indices where t > 21 && hand[idx].isAce && hand[idx].value == 11 {
-                hand[idx].value = 1
-                t -= 10
-            }
+        var t = total(of: hand)
+        for idx in hand.indices where t > 21 && hand[idx].isAce && hand[idx].value == 11 {
+            hand[idx].value = 1
+            t -= 10
         }
+    }
     
     func total(of hand: [Card]) -> Int {
-           hand.reduce(0) { $0 + $1.value }
-       }
+        hand.reduce(0) { $0 + $1.value }
+    }
     
     func checkGameOver() {
         let playerTotal = playerCards.reduce(0, { $0 + $1.value })
@@ -193,9 +198,10 @@ struct BlackJack: View {
     }
     
     func nextHand() {
+        selectedBet = nil
+        gamePhase    = .betting
+        gameMessage  = "Place your bet!!!"
         playerCards = []
         dealerCards = []
-        gameMessage = "New game started!"
-        gameOver = false
     }
 }

@@ -63,6 +63,7 @@ struct BlackJack: View {
                     stand()
                 }
                 .disabled(gamePhase != .playing)
+                
             }
             
             HStack {
@@ -91,8 +92,9 @@ struct BlackJack: View {
                     place(bet: 1000)
                     dealInitialCards()
                 }
+                .disabled(gamePhase != .betting)
             }
-            .disabled(gamePhase != .betting)
+            
             Button("Next hand") {
                 nextHand()
             }
@@ -140,11 +142,22 @@ struct BlackJack: View {
         default: return ""
         }
     }
+    func payOutWin() {
+        guard let bet = selectedBet else { return }
+        cash += bet * 2
+    }
+    
     func hit() {
         drawCard(into: &playerCards)
-        playerTotal = total(of: playerCards)
-        if playerTotal > 21 {
-            gameMessage = "Busted!"
+        let total = total(of: playerCards)
+
+        if total > 21 {
+            gameMessage = "You busted! Dealer wins."
+            gamePhase = .handOver
+
+        } else if total == 21 {
+            payOutWin()
+            gameMessage = "Blackjack! You win!"
             gamePhase = .handOver
         }
     }
@@ -153,16 +166,20 @@ struct BlackJack: View {
         while total(of: dealerCards) < 17 {
             drawCard(into: &dealerCards)
         }
+
         let playerTotal = total(of: playerCards)
         let dealerTotal = total(of: dealerCards)
-        
+
         if dealerTotal > 21 || playerTotal > dealerTotal {
+            payOutWin()
             gameMessage = "You win!"
         } else {
-            gameMessage = "Dealer wins."
+            gameMessage = "Dealer wins!"
         }
+
         gamePhase = .handOver
     }
+
     
     func dealInitialCards() {
         playerCards.removeAll()

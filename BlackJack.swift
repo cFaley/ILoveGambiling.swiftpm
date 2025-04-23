@@ -56,11 +56,14 @@ struct BlackJack: View {
             HStack {
                 Button("Hit") {
                     hit()
-                    checkGameOver()
                 }
+                .disabled(gamePhase != .playing)
+
                 Button("Stand") {
-                    dealerTurn()
+                    stand()
                 }
+                .disabled(gamePhase != .playing)
+
             }
             
             HStack {
@@ -147,16 +150,16 @@ struct BlackJack: View {
     }
     
     func drawCard(into hand: inout [Card]) {
-            let raw = Int.random(in: 1...13)
-            let card = Card(
-                value: raw > 10 ? 10 : raw,
-                suit: ["hearts","diamonds","clubs","spades"].randomElement()!,
-                isFaceCard: raw > 10,
-                isAce: raw == 1
-            )
-            hand.append(card)
-            adjustAces(in: &hand)
-        }
+        let raw = Int.random(in: 1...13)
+        let card = Card(
+            value: raw > 10 ? 10 : raw,
+            suit: ["hearts","diamonds","clubs","spades"].randomElement()!,
+            isFaceCard: raw > 10,
+            isAce: raw == 1
+        )
+        hand.append(card)
+        adjustAces(in: &hand)
+    }
     func adjustAces(in hand: inout [Card]) {
         var t = total(of: hand)
         for idx in hand.indices where t > 21 && hand[idx].isAce && hand[idx].value == 11 {
@@ -180,22 +183,20 @@ struct BlackJack: View {
         }
     }
     
-    func dealerTurn() {
-        while dealerCards.reduce(0, { $0 + $1.value }) < 17 {
-            hit()
+    func stand() {
+            while total(of: dealerCards) < 17 {
+                drawCard(into: &dealerCards)
+            }
+            let playerTotal = total(of: playerCards)
+            let dealerTotal = total(of: dealerCards)
+
+            if dealerTotal > 21 || playerTotal > dealerTotal {
+                gameMessage = "You win!"
+            } else {
+                gameMessage = "Dealer wins."
+            }
+            gamePhase = .handOver
         }
-        let dealerTotal = dealerCards.reduce(0, { $0 + $1.value })
-        let playerTotal = playerCards.reduce(0, { $0 + $1.value })
-        
-        if dealerTotal > 21 {
-            gameMessage = "Dealer busted! You win!"
-        } else if dealerTotal >= playerTotal {
-            gameMessage = "Dealer wins!"
-        } else {
-            gameMessage = "You win!"
-        }
-        gameOver = true
-    }
     
     func nextHand() {
         selectedBet = nil

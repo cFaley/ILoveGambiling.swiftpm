@@ -6,7 +6,7 @@ struct Slots: View {
     @State var slot3 = 0
 //    @State var IsSpinning = true
 //    @State var count = 0
-    @State var cash = 5000
+    @AppStorage("cash") var cash: Int = 5000
     @State var canSpin = true
     
     var body: some View {

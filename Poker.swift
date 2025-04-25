@@ -25,7 +25,7 @@ struct Poker: View {
             //                Text("\(cardPool[card])")
             //            }
             
-            Text("AI1 hand:")
+            Text("AI hand:")
             HStack{
                 ForEach(0..<AIHand.count, id: \.self){card in
                     //                    Text("\(AIHand[card])")
@@ -52,8 +52,12 @@ struct Poker: View {
                         .frame(width: 50, height: 75, alignment: .center)
                 }
             }
+            Text("\(YourHandRank)")
             HStack{
                 Button("Call") {
+                    if RoundNum == 3{
+                        RateHands()
+                }
                     NextRound()
                 }
             }
@@ -87,20 +91,20 @@ struct Poker: View {
         cardPool.remove(at: AIcard2)
     }
     func RateHands(){
-        let suit1 = yourHand[1].first!
-        value1 = String(yourHand[1].dropFirst())
-        let suit2 = yourHand[2].first!
-        value2 = String(yourHand[2].dropFirst())
-        let Rsuit1 = yourHand[1].first!
-        Rvalue1 = String(River[1].dropFirst())
-        let Rsuit2 = River[2].first!
-        Rvalue2 = String(River[2].dropFirst())
-        let Rsuit3 = River[3].first!
-        Rvalue3 = String(River[3].dropFirst())
-        let Rsuit4 = River[4].first!
-        Rvalue4 = String(River[4].dropFirst())
-        let Rsuit5 = River[5].first!
-        Rvalue5 = String(River[5].dropFirst())
+        let suit1 = yourHand[0].first!
+        value1 = String(yourHand[0].dropFirst())
+        let suit2 = yourHand[1].first!
+        value2 = String(yourHand[1].dropFirst())
+        let Rsuit1 = yourHand[0].first!
+        Rvalue1 = String(River[0].dropFirst())
+        let Rsuit2 = River[1].first!
+        Rvalue2 = String(River[1].dropFirst())
+        let Rsuit3 = River[2].first!
+        Rvalue3 = String(River[2].dropFirst())
+        let Rsuit4 = River[3].first!
+        Rvalue4 = String(River[3].dropFirst())
+        let Rsuit5 = River[4].first!
+        Rvalue5 = String(River[4].dropFirst())
         
         
         if value1 == "A"{
@@ -189,245 +193,67 @@ struct Poker: View {
         }
         
         if suit1 == suit2{
-            if suit1 == Rsuit1{
-                if suit1 == Rsuit2{
-                    if suit1 == Rsuit3{
-                        
-                    }
-                    else{
-                        if suit1 == Rsuit4{
-                            
-                        }
-                        else{
-                            if suit1 == Rsuit5{
-                                
-                            }
-                        }
-                    }
-                }
-                else{
-                    if suit1 == Rsuit3{
-                        if suit1 == Rsuit4{
-                            if suit1 == Rsuit5{
-                                
-                            }
-                        }
-                        else{
-                            if suit1 == Rsuit5{
-                                
-                            }
-                        }
-                    }
-                    else{
-                        if suit1 == Rsuit4{
-                            
-                        }
-                        else{
-                            if suit1 == Rsuit5{
-                            }
-                        }
-                    }
-                }
-            }
-            else{
-                if suit1 == Rsuit2{
-                    
-                }
-                else{
-                    if suit1 == Rsuit3{
-                        
-                    }
-                    else{
-                        if suit1 == Rsuit4{
-                            
-                        }
-                        else{
-                            if suit1 == Rsuit5{
-                            }
-                        }
-                    }
-                }
-            }
+            YourHandRank += 1
         }
         if suit1 == Rsuit1{
-            if suit1 == Rsuit2{
-                if suit1 == Rsuit3{
-                    
-                }
-                else{
-                    if suit1 == Rsuit4{
-                        
-                    }
-                    else{
-                        if suit1 == Rsuit5{
-                            
-                        }
-                    }
-                }
-            }
-            else{
-                if suit1 == Rsuit3{
-                    if suit1 == Rsuit4{
-                        if suit1 == Rsuit5{
-                            
-                        }
-                    }
-                    else{
-                        if suit1 == Rsuit5{
-                            
-                        }
-                    }
-                }
-                else{
-                    if suit1 == Rsuit4{
-                        
-                    }
-                    else{
-                        if suit1 == Rsuit5{
-                        }
-                    }
-                }
-            }
-        }
-        else{
-            if suit1 == Rsuit2{
-                
-            }
-            else{
-                if suit1 == Rsuit3{
-                    
-                }
-                else{
-                    if suit1 == Rsuit4{
-                        
-                    }
-                    else{
-                        if suit1 == Rsuit5{
-                        }
-                    }
-                }
-            }
-            
+            YourHandRank += 1
         }
         if suit1 == Rsuit2{
-            if suit1 == Rsuit3{
-                if suit1 == Rsuit4{
-                    if suit1 == Rsuit5{
-                        
-                    }
-                }
-                else{
-                    if suit1 == Rsuit5{
-                        
-                    }
-                }
-            }
-            else{
-                if suit1 == Rsuit4{
-                    
-                }
-                else{
-                    if suit1 == Rsuit5{
-                    }
-                }
-            }
-        }
-        else{
-            if suit1 == Rsuit3{
-                
-            }
-            else{
-                if suit1 == Rsuit4{
-                    
-                }
-                else{
-                    if suit1 == Rsuit5{
-                    }
-                }
-            }
+            YourHandRank += 1
         }
         if suit1 == Rsuit3{
-            if suit1 == Rsuit4{
-                if suit1 == Rsuit5{
-                    
-                }
-            }
-            else{
-                if suit1 == Rsuit5{
-                    
-                }
-            }
-        }
-        else{
-            if suit1 == Rsuit4{
-                
-            }
-            else{
-                if suit1 == Rsuit5{
-                }
-                
-            }
-        }
-        else{
-            
-            if suit1 == Rsuit4{
-                
-            }
-            else{
-                if suit1 == Rsuit5{
-                }
-            }
+            YourHandRank += 1
         }
         if suit1 == Rsuit4{
-            
+            YourHandRank += 1
         }
         if suit1 == Rsuit5{
-            
+            YourHandRank += 1
         }
         if suit2 == Rsuit1{
-            
+            YourHandRank += 1
         }
         if suit2 == Rsuit2{
-            
+            YourHandRank += 1
         }
         if suit2 == Rsuit3{
-            
+            YourHandRank += 1
         }
         if suit2 == Rsuit4{
-            
+            YourHandRank += 1
         }
         if suit2 == Rsuit5{
-            
+            YourHandRank += 1
         }
         if Rsuit1 == Rsuit2{
-            
+            YourHandRank += 1
         }
         if Rsuit1 == Rsuit3{
-            
+            YourHandRank += 1
         }
         if Rsuit1 == Rsuit4{
-            
+            YourHandRank += 1
         }
         if Rsuit1 == Rsuit5{
-            
+            YourHandRank += 1
         }
         if Rsuit2 == Rsuit3{
-            
+            YourHandRank += 1
         }
         if Rsuit2 == Rsuit4{
-            
+            YourHandRank += 1
         }
         if Rsuit2 == Rsuit5{
-            
+            YourHandRank += 1
         }
         if Rsuit3 == Rsuit4{
-            
+            YourHandRank += 1
         }
         if Rsuit3 == Rsuit5{
-            
+            YourHandRank += 1
         }
         if Rsuit4 == Rsuit5{
-            
+            YourHandRank += 13
         }
         
     }

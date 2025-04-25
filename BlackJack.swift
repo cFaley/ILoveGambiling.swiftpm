@@ -32,7 +32,6 @@ struct BlackJack: View {
                 Text("Cash $\(cash)")
                 VStack {
                     HStack{
-                        Text("Your Hand:")
                         Text("Your Hand: \( total(of: playerCards) )")
                     }
                     HStack {
@@ -43,7 +42,6 @@ struct BlackJack: View {
                 }
                 VStack {
                     HStack{
-                        Text("Dealer's Hand:")
                         Text("Dealer's Hand: \( total(of: dealerCards) )")
                         
                     }

@@ -1,5 +1,5 @@
 import SwiftUI
-//import PokerHandEvaluator
+
 
 struct Poker: View {
     @State var cardPool = [""]
@@ -9,6 +9,8 @@ struct Poker: View {
     @State var RoundNum = 0
     @State var YourHandRank = 0
     @State var AIHandRank = 0
+    @State var YourHighCard = 0
+    @State var AIHighCard = 0
     @State var value1 = ""
     @State var value2 = ""
     @State var Rvalue1 = ""
@@ -205,7 +207,16 @@ struct Poker: View {
                 }
                 else{
                     if suit1 == Rsuit3{
-                        
+                        if suit1 == Rsuit4{
+                            if suit1 == Rsuit5{
+                                
+                            }
+                        }
+                        else{
+                            if suit1 == Rsuit5{
+                                
+                            }
+                        }
                     }
                     else{
                         if suit1 == Rsuit4{
@@ -239,13 +250,133 @@ struct Poker: View {
             }
         }
         if suit1 == Rsuit1{
+            if suit1 == Rsuit2{
+                if suit1 == Rsuit3{
+                    
+                }
+                else{
+                    if suit1 == Rsuit4{
+                        
+                    }
+                    else{
+                        if suit1 == Rsuit5{
+                            
+                        }
+                    }
+                }
+            }
+            else{
+                if suit1 == Rsuit3{
+                    if suit1 == Rsuit4{
+                        if suit1 == Rsuit5{
+                            
+                        }
+                    }
+                    else{
+                        if suit1 == Rsuit5{
+                            
+                        }
+                    }
+                }
+                else{
+                    if suit1 == Rsuit4{
+                        
+                    }
+                    else{
+                        if suit1 == Rsuit5{
+                        }
+                    }
+                }
+            }
+        }
+        else{
+            if suit1 == Rsuit2{
+                
+            }
+            else{
+                if suit1 == Rsuit3{
+                    
+                }
+                else{
+                    if suit1 == Rsuit4{
+                        
+                    }
+                    else{
+                        if suit1 == Rsuit5{
+                        }
+                    }
+                }
+            }
             
         }
         if suit1 == Rsuit2{
-            
+            if suit1 == Rsuit3{
+                if suit1 == Rsuit4{
+                    if suit1 == Rsuit5{
+                        
+                    }
+                }
+                else{
+                    if suit1 == Rsuit5{
+                        
+                    }
+                }
+            }
+            else{
+                if suit1 == Rsuit4{
+                    
+                }
+                else{
+                    if suit1 == Rsuit5{
+                    }
+                }
+            }
+        }
+        else{
+            if suit1 == Rsuit3{
+                
+            }
+            else{
+                if suit1 == Rsuit4{
+                    
+                }
+                else{
+                    if suit1 == Rsuit5{
+                    }
+                }
+            }
         }
         if suit1 == Rsuit3{
+            if suit1 == Rsuit4{
+                if suit1 == Rsuit5{
+                    
+                }
+            }
+            else{
+                if suit1 == Rsuit5{
+                    
+                }
+            }
+        }
+        else{
+            if suit1 == Rsuit4{
+                
+            }
+            else{
+                if suit1 == Rsuit5{
+                }
+                
+            }
+        }
+        else{
             
+            if suit1 == Rsuit4{
+                
+            }
+            else{
+                if suit1 == Rsuit5{
+                }
+            }
         }
         if suit1 == Rsuit4{
             

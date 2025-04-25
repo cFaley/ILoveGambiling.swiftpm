@@ -71,6 +71,7 @@ struct Poker: View {
         }
     }
     func StartGame(){
+        YourHandRank = 0
         RoundNum = 0
         River = []
         cardPool = []
@@ -192,68 +193,68 @@ struct Poker: View {
             Rvalue5 = "11"
         }
         
-        if suit1 == suit2{
+        if value1 == value2{
             YourHandRank += 1
         }
-        if suit1 == Rsuit1{
+        if value1 == Rvalue1{
             YourHandRank += 1
         }
-        if suit1 == Rsuit2{
+        if value1 == Rvalue2{
             YourHandRank += 1
         }
-        if suit1 == Rsuit3{
+        if value1 == Rvalue3{
             YourHandRank += 1
         }
-        if suit1 == Rsuit4{
+        if value1 == Rvalue4{
             YourHandRank += 1
         }
-        if suit1 == Rsuit5{
+        if value1 == Rvalue5{
             YourHandRank += 1
         }
-        if suit2 == Rsuit1{
+        if value2 == Rvalue1{
             YourHandRank += 1
         }
-        if suit2 == Rsuit2{
+        if value2 == Rvalue2{
             YourHandRank += 1
         }
-        if suit2 == Rsuit3{
+        if value2 == Rvalue3{
             YourHandRank += 1
         }
-        if suit2 == Rsuit4{
+        if value2 == Rvalue4{
             YourHandRank += 1
         }
-        if suit2 == Rsuit5{
+        if value2 == Rvalue5{
             YourHandRank += 1
         }
-        if Rsuit1 == Rsuit2{
+        if Rvalue1 == Rvalue2{
             YourHandRank += 1
         }
-        if Rsuit1 == Rsuit3{
+        if Rvalue1 == Rvalue3{
             YourHandRank += 1
         }
-        if Rsuit1 == Rsuit4{
+        if Rvalue1 == Rvalue4{
             YourHandRank += 1
         }
-        if Rsuit1 == Rsuit5{
+        if Rvalue1 == Rvalue5{
             YourHandRank += 1
         }
-        if Rsuit2 == Rsuit3{
+        if Rvalue2 == Rvalue3{
             YourHandRank += 1
         }
-        if Rsuit2 == Rsuit4{
+        if Rvalue2 == Rvalue4{
             YourHandRank += 1
         }
-        if Rsuit2 == Rsuit5{
+        if Rvalue2 == Rvalue5{
             YourHandRank += 1
         }
-        if Rsuit3 == Rsuit4{
+        if Rvalue3 == Rvalue4{
             YourHandRank += 1
         }
-        if Rsuit3 == Rsuit5{
+        if Rvalue3 == Rvalue5{
             YourHandRank += 1
         }
-        if Rsuit4 == Rsuit5{
-            YourHandRank += 13
+        if Rvalue4 == Rvalue5{
+            YourHandRank += 1
         }
         
     }

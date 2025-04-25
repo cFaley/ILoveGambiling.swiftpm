@@ -20,8 +20,6 @@ struct BlackJack: View {
     @State var gameMessage: String = "Welcome to Blackjack!"
     @State var gameOver: Bool = false
     @State var playerBet: Int = 0
-    @State var dealerTotal: Int = 0
-    @State var playerTotal: Int = 0
     var body: some View {
         VStack(spacing: 20) {
             Text("Blackjack")
@@ -34,7 +32,7 @@ struct BlackJack: View {
             VStack {
                 HStack{
                     Text("Your Hand:")
-                    Text("\(playerTotal)")
+                    Text("Your Hand: \( total(of: playerCards) )")
                 }
                 HStack {
                     ForEach(playerCards) { card in
@@ -45,7 +43,8 @@ struct BlackJack: View {
             VStack {
                 HStack{
                     Text("Dealer's Hand:")
-                    Text("\(dealerTotal)")
+                    Text("Dealer's Hand: \( total(of: dealerCards) )")
+                    
                 }
                 HStack {
                     ForEach(dealerCards) { card in
@@ -150,11 +149,11 @@ struct BlackJack: View {
     func hit() {
         drawCard(into: &playerCards)
         let total = total(of: playerCards)
-
+        
         if total > 21 {
             gameMessage = "You busted! Dealer wins."
             gamePhase = .handOver
-
+            
         } else if total == 21 {
             payOutWin()
             gameMessage = "Blackjack! You win!"
@@ -166,20 +165,22 @@ struct BlackJack: View {
         while total(of: dealerCards) < 17 {
             drawCard(into: &dealerCards)
         }
-
+        
         let playerTotal = total(of: playerCards)
         let dealerTotal = total(of: dealerCards)
-
+        
         if dealerTotal > 21 || playerTotal > dealerTotal {
             payOutWin()
             gameMessage = "You win!"
+        } else if dealerTotal >= 21 || dealerTotal == playerTotal {
+            gameMessage = "It's a Tie! But you still lose money"
         } else {
             gameMessage = "Dealer wins!"
         }
-
+        
         gamePhase = .handOver
     }
-
+    
     
     func dealInitialCards() {
         playerCards.removeAll()
@@ -188,9 +189,6 @@ struct BlackJack: View {
         drawCard(into: &playerCards)
         drawCard(into: &playerCards)
         drawCard(into: &dealerCards)
-        
-        playerTotal = total(of: playerCards)
-        dealerTotal = total(of: dealerCards)
     }
     
     func place(bet amount: Int) {
@@ -221,8 +219,21 @@ struct BlackJack: View {
     }
     
     func total(of hand: [Card]) -> Int {
-        hand.reduce(0) { $0 + $1.value }
+        var sum = hand
+            .filter { !$0.isAce }
+            .reduce(0) { $0 + $1.value }
+        let aceCount = hand.filter { $0.isAce }.count
+        for _ in 0..<aceCount {
+            if sum + 11 <= 21 {
+                sum += 11
+            } else {
+                sum += 1
+            }
+        }
+        
+        return sum
     }
+    
     
     func checkGameOver() {
         let playerTotal = playerCards.reduce(0, { $0 + $1.value })

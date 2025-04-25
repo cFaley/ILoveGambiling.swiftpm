@@ -14,92 +14,94 @@ struct BlackJack: View {
     
     @State var gamePhase: GamePhase = .betting
     @State var selectedBet: Int?    = nil
-    @State var cash: Int = 5000
+    @AppStorage("cash") var cash: Int = 5000
     @State var playerCards: [Card] = []
     @State var dealerCards: [Card] = []
     @State var gameMessage: String = "Welcome to Blackjack!"
     @State var gameOver: Bool = false
     @State var playerBet: Int = 0
     var body: some View {
-        VStack(spacing: 20) {
-            Text("Blackjack")
-                .font(.largeTitle)
-                .bold()
-            Text(gameMessage)
-                .padding()
-            
-            Text("Cash $\(cash)")
-            VStack {
-                HStack{
-                    Text("Your Hand:")
-                    Text("Your Hand: \( total(of: playerCards) )")
-                }
-                HStack {
-                    ForEach(playerCards) { card in
-                        cardView(card: card)
+        ZStack{
+            VStack(spacing: 20) {
+                Text("Blackjack")
+                    .font(.largeTitle)
+                    .bold()
+                Text(gameMessage)
+                    .padding()
+                
+                Text("Cash $\(cash)")
+                VStack {
+                    HStack{
+                        Text("Your Hand:")
+                        Text("Your Hand: \( total(of: playerCards) )")
+                    }
+                    HStack {
+                        ForEach(playerCards) { card in
+                            cardView(card: card)
+                        }
                     }
                 }
-            }
-            VStack {
-                HStack{
-                    Text("Dealer's Hand:")
-                    Text("Dealer's Hand: \( total(of: dealerCards) )")
+                VStack {
+                    HStack{
+                        Text("Dealer's Hand:")
+                        Text("Dealer's Hand: \( total(of: dealerCards) )")
+                        
+                    }
+                    HStack {
+                        ForEach(dealerCards) { card in
+                            cardView(card: card)
+                        }
+                    }
+                }
+                HStack {
+                    Button("Hit") {
+                        hit()
+                    }
+                    .disabled(gamePhase != .playing)
+                    
+                    Button("Stand") {
+                        stand()
+                    }
+                    .disabled(gamePhase != .playing)
                     
                 }
+                
                 HStack {
-                    ForEach(dealerCards) { card in
-                        cardView(card: card)
+                    Text("Select a bet:")
+                    Button("$50") {
+                        place(bet: 50)
+                        dealInitialCards()
                     }
+                    .disabled(gamePhase != .betting)
+                    Button("$100") {
+                        place(bet: 100)
+                        dealInitialCards()
+                    }
+                    .disabled(gamePhase != .betting)
+                    Button("$250") {
+                        place(bet: 250)
+                        dealInitialCards()
+                    }
+                    .disabled(gamePhase != .betting)
+                    Button("$500") {
+                        place(bet: 500)
+                        dealInitialCards()
+                    }
+                    .disabled(gamePhase != .betting)
+                    Button("$1000") {
+                        place(bet: 1000)
+                        dealInitialCards()
+                    }
+                    .disabled(gamePhase != .betting)
                 }
-            }
-            HStack {
-                Button("Hit") {
-                    hit()
-                }
-                .disabled(gamePhase != .playing)
                 
-                Button("Stand") {
-                    stand()
+                Button("Next hand") {
+                    nextHand()
                 }
-                .disabled(gamePhase != .playing)
-                
             }
-            
-            HStack {
-                Text("Select a bet:")
-                Button("$50") {
-                    place(bet: 50)
-                    dealInitialCards()
-                }
-                .disabled(gamePhase != .betting)
-                Button("$100") {
-                    place(bet: 100)
-                    dealInitialCards()
-                }
-                .disabled(gamePhase != .betting)
-                Button("$250") {
-                    place(bet: 250)
-                    dealInitialCards()
-                }
-                .disabled(gamePhase != .betting)
-                Button("$500") {
-                    place(bet: 500)
-                    dealInitialCards()
-                }
-                .disabled(gamePhase != .betting)
-                Button("$1000") {
-                    place(bet: 1000)
-                    dealInitialCards()
-                }
-                .disabled(gamePhase != .betting)
-            }
-            
-            Button("Next hand") {
+            .onAppear {
                 nextHand()
             }
-        }
-        .onAppear {
-            nextHand()
         }
     }
     

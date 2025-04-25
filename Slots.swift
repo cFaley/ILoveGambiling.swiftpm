@@ -8,8 +8,7 @@ struct Slots: View {
 //    @State var count = 0
     @AppStorage("cash") var cash: Int = 5000
     @State var canSpin = true
-    @State var YourHandRank = 0
-    @State var AIHandRank = 0
+    
     var body: some View {
         VStack {
             Text("Cash $\(cash)")

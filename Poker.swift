@@ -18,6 +18,7 @@ struct Poker: View {
     @State var Rvalue3 = ""
     @State var Rvalue4 = ""
     @State var Rvalue5 = ""
+    @State var TwoPairDict: [String : Int] = ["2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"J":0,"Q":0,"K":0,"A":0]
     var body: some View {
         VStack{
             
@@ -90,6 +91,36 @@ struct Poker: View {
         let AIcard2 = Int.random(in: 1..<cardPool.count)
         AIHand.append(cardPool[AIcard2])
         cardPool.remove(at: AIcard2)
+    }
+    func PairPlayer(){
+//        var cards: [String : Int] = [:]
+        TwoPairDict = ["2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"J":0,"Q":0,"K":0,"A":0]
+        for card in yourHand{
+//            var counter = 1
+            TwoPairDict[String(card.dropFirst())]! += 1
+        }
+        for card in River{
+//            var counter = 1
+            TwoPairDict[String(card.dropFirst())]! += 1
+        }
+        var result = [String]()
+            for (key, value) in TwoPairDict {
+                if value == 2 {
+                    result.append(key)
+                }
+            }
+        print("\(result.count)")
+        if result.count == 0{
+        }
+        else{
+
+            if result.count == 1{
+                YourHandRank = 1
+            }
+            else {
+                YourHandRank = 2
+            }
+        }
     }
     func RateHands(){
         let suit1 = yourHand[0].first!
@@ -192,72 +223,9 @@ struct Poker: View {
         if Rvalue5 == "J"{
             Rvalue5 = "11"
         }
-        
-        if value1 == value2{
-            YourHandRank += 1
-        }
-        if value1 == Rvalue1{
-            YourHandRank += 1
-        }
-        if value1 == Rvalue2{
-            YourHandRank += 1
-        }
-        if value1 == Rvalue3{
-            YourHandRank += 1
-        }
-        if value1 == Rvalue4{
-            YourHandRank += 1
-        }
-        if value1 == Rvalue5{
-            YourHandRank += 1
-        }
-        if value2 == Rvalue1{
-            YourHandRank += 1
-        }
-        if value2 == Rvalue2{
-            YourHandRank += 1
-        }
-        if value2 == Rvalue3{
-            YourHandRank += 1
-        }
-        if value2 == Rvalue4{
-            YourHandRank += 1
-        }
-        if value2 == Rvalue5{
-            YourHandRank += 1
-        }
-        if Rvalue1 == Rvalue2{
-            YourHandRank += 1
-        }
-        if Rvalue1 == Rvalue3{
-            YourHandRank += 1
-        }
-        if Rvalue1 == Rvalue4{
-            YourHandRank += 1
-        }
-        if Rvalue1 == Rvalue5{
-            YourHandRank += 1
-        }
-        if Rvalue2 == Rvalue3{
-            YourHandRank += 1
-        }
-        if Rvalue2 == Rvalue4{
-            YourHandRank += 1
-        }
-        if Rvalue2 == Rvalue5{
-            YourHandRank += 1
-        }
-        if Rvalue3 == Rvalue4{
-            YourHandRank += 1
-        }
-        if Rvalue3 == Rvalue5{
-            YourHandRank += 1
-        }
-        if Rvalue4 == Rvalue5{
-            YourHandRank += 1
-        }
-        
+        PairPlayer()
     }
+    
     func NextRound(){
         if RoundNum == 0{
             let RiverCard1 = Int.random(in: 1..<cardPool.count)

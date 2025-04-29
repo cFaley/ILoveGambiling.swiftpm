@@ -17,16 +17,15 @@ struct BlackJack: View {
     @AppStorage("cash") var cash: Int = 5000
     @State var playerCards: [Card] = []
     @State var dealerCards: [Card] = []
-    @State var gameMessage: String = "Welcome to Blackjack!"
+    @State var gameMessage: String = ""
     @State var gameOver: Bool = false
     @State var playerBet: Int = 0
     var body: some View {
         ZStack{
             VStack(spacing: 20) {
-                Text("Blackjack")
+                Text(gameMessage)
                     .font(.largeTitle)
                     .bold()
-                Text(gameMessage)
                     .padding()
                 
                 Text("Cash $\(cash)")
@@ -249,7 +248,7 @@ struct BlackJack: View {
     func nextHand() {
         selectedBet = nil
         gamePhase    = .betting
-        gameMessage  = "Place your bet!!!"
+        gameMessage  = "Place your bet!"
         playerCards = []
         dealerCards = []
     }

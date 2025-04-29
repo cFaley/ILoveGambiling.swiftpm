@@ -3,7 +3,7 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         ZStack{
-
+            
             VStack {
                 
                 Text("I Love Gambling❤️")
@@ -41,6 +41,17 @@ struct ContentView: View {
                             RoundedRectangle(cornerRadius: 100)
                                 .frame(width: 300, height: 100, alignment: .center)
                             Text("Poker")
+                                .font(.largeTitle)
+                                .foregroundStyle(.black)
+                            
+                        }
+                    }
+                    NavigationLink(destination: Roulette()) {
+                        ZStack{
+                            
+                            RoundedRectangle(cornerRadius: 100)
+                                .frame(width: 300, height: 100, alignment: .center)
+                            Text("Roulette")
                                 .font(.largeTitle)
                                 .foregroundStyle(.black)
                             

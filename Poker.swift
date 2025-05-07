@@ -13,6 +13,8 @@ struct Poker: View {
     @State var AIHighCard = 0
     @State var value1 = ""
     @State var value2 = ""
+    @State var AIvalue1 = ""
+    @State var AIvalue2 = ""
     @State var Rvalue1 = ""
     @State var Rvalue2 = ""
     @State var Rvalue3 = ""
@@ -20,14 +22,35 @@ struct Poker: View {
     @State var Rvalue5 = ""
     @State var TwoPairDict: [String : Int] = ["2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"J":0,"Q":0,"K":0,"A":0]
     @State var FlushDict: [String : Int] = ["C":0,"S":0,"D":0,"H":0]
+    @State var AIFlushDict: [String : Int] = ["C":0,"S":0,"D":0,"H":0]
     @State var PlayerCardNum: [Int : [Int:String]] = [:]
+    @State var AICardNum: [Int : [Int:String]] = [:]
     var body: some View {
         VStack{
             
             //            ForEach(0..<cardPool.count, id: \.self){card in
             //                Text("\(cardPool[card])")
             //            }
-            
+            //            Circle()
+            //                .frame(width: 100, height: 100, alignment: .center)
+            //                .onTapGesture {
+            //                    River = ["HJ","HK","HQ","CA","C10"]
+            //                    yourHand = ["H10","HA"]
+            //                }
+            if RoundNum >= 4{
+                
+                
+                if YourHandRank > AIHandRank{
+                    Text("You Win!")
+                }
+                if AIHandRank > YourHandRank{
+                    Text("AIWins")
+                }
+                if YourHandRank == AIHandRank{
+                    Text("Tie!")
+                }
+            }
+            Text("\(AIHandRank)")
             Text("AI hand:")
             HStack{
                 ForEach(0..<AIHand.count, id: \.self){card in
@@ -156,10 +179,72 @@ struct Poker: View {
             }
         }
     }
+    func PairAI(){
+        //        var cards: [String : Int] = [:]
+        TwoPairDict = ["2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"J":0,"Q":0,"K":0,"A":0]
+        for card in AIHand{
+            //            var counter = 1
+            TwoPairDict[String(card.dropFirst())]! += 1
+        }
+        for card in River{
+            //            var counter = 1
+            TwoPairDict[String(card.dropFirst())]! += 1
+        }
+        var result = [String]()
+        var result2 = [String]()
+        var result3 = [String]()
+        for (key, value) in TwoPairDict {
+            if value == 2 {
+                result.append(key)
+            }
+        }
+        for (key, value) in TwoPairDict {
+            if value == 3 {
+                result2.append(key)
+            }
+        }
+        for (key, value) in TwoPairDict {
+            if value == 4 {
+                result3.append(key)
+            }
+        }
+        print("\(result.count)")
+        if result.count == 0{
+        }
+        else{
+            
+            if result.count == 1{
+                if AIHandRank <= 1{
+                    AIHandRank = 1
+                }
+            }
+            else {
+                if AIHandRank <= 2{
+                    AIHandRank = 2
+                }
+            }
+        }
+        if result2.count >= 1{
+            if AIHandRank <= 3{
+                AIHandRank = 3
+            }
+            if result.count >= 1{
+                if AIHandRank <= 6{
+                    AIHandRank = 6
+                }
+            }
+        }
+        
+        if result3.count >= 1{
+            if AIHandRank <= 7{
+                AIHandRank = 7
+            }
+        }
+    }
     func PlayerFlush(){
         FlushDict = ["C":0,"S":0,"D":0,"H":0]
         var currentSuit = ""
-//                var SortedNums = PlayerCardNum.sorted
+        //                var SortedNums = PlayerCardNum.sorted
         for card in yourHand{
             //            var counter = 1
             FlushDict["\(String(card.first!))"]! += 1
@@ -191,29 +276,45 @@ struct Poker: View {
         }
         
         let sortedCardNumList:[Int] = cardNumList.sorted()
+        print(sortedCardNumList)
+        
+        
         if sortedCardNumList.count >= 5 {
+            if sortedCardNumList.last == 14{
+                if sortedCardNumList[sortedCardNumList.count - 2] == 13{
+                    if sortedCardNumList[sortedCardNumList.count - 3] == 12{
+                        if sortedCardNumList[sortedCardNumList.count - 4] == 11{
+                            if sortedCardNumList[sortedCardNumList.count - 5] == 10{
+                                YourHandRank = 10
+                            }
+                        }
+                    }
+                }
+            }
             
-            
-            if sortedCardNumList[1] + 1 == sortedCardNumList[2]{
-                if sortedCardNumList[2] + 1 == sortedCardNumList[3]{
-                    if sortedCardNumList[3] + 1 == sortedCardNumList[4]{
-                        if sortedCardNumList[4] + 1 == sortedCardNumList[5]{
+            if sortedCardNumList[0] + 1 == sortedCardNumList[1]{
+                print("1")
+                if sortedCardNumList[1] + 1 == sortedCardNumList[2]{
+                    print("2")
+                    if sortedCardNumList[2] + 1 == sortedCardNumList[3]{
+                        print("3")
+                        if sortedCardNumList[3] + 1 == sortedCardNumList[4]{
+                            print("4")
                             
                             if YourHandRank <= 9{
+                                print("5")
                                 YourHandRank = 9
+                                
                             }
                         }
                     }
                 }
             }
             if sortedCardNumList.count >= 6{
-                
-                
-                
-                if sortedCardNumList[2] + 1 == sortedCardNumList[3]{
-                    if sortedCardNumList[3] + 1 == sortedCardNumList[4]{
-                        if sortedCardNumList[4] + 1 == sortedCardNumList[5]{
-                            if sortedCardNumList[5] + 1 == sortedCardNumList[6]{
+                if sortedCardNumList[1] + 1 == sortedCardNumList[2]{
+                    if sortedCardNumList[2] + 1 == sortedCardNumList[3]{
+                        if sortedCardNumList[3] + 1 == sortedCardNumList[4]{
+                            if sortedCardNumList[4] + 1 == sortedCardNumList[5]{
                                 
                                 if YourHandRank <= 9{
                                     YourHandRank = 9
@@ -224,10 +325,10 @@ struct Poker: View {
                 }
                 if sortedCardNumList.count == 7{
                     
-                    if sortedCardNumList[3] + 1 == sortedCardNumList[4]{
-                        if sortedCardNumList[4] + 1 == sortedCardNumList[5]{
-                            if sortedCardNumList[5] + 1 == sortedCardNumList[6]{
-                                if sortedCardNumList[6] + 1 == sortedCardNumList[7]{
+                    if sortedCardNumList[2] + 1 == sortedCardNumList[3]{
+                        if sortedCardNumList[3] + 1 == sortedCardNumList[4]{
+                            if sortedCardNumList[4] + 1 == sortedCardNumList[5]{
+                                if sortedCardNumList[5] + 1 == sortedCardNumList[6]{
                                     if YourHandRank <= 9{
                                         YourHandRank = 9
                                     }
@@ -241,6 +342,111 @@ struct Poker: View {
         if result.count >= 1{
             if YourHandRank <= 5{
                 YourHandRank = 5
+            }
+        }
+        
+    }
+    func AIFlush(){
+        AIFlushDict = ["C":0,"S":0,"D":0,"H":0]
+        var currentSuit = ""
+        //                var SortedNums = PlayerCardNum.sorted
+        for card in AIHand{
+            //            var counter = 1
+            AIFlushDict["\(String(card.first!))"]! += 1
+        }
+        for card in River{
+            //            var counter = 1
+            AIFlushDict["\(String(card.first!))"]! += 1
+        }
+        
+        var result = [String]()
+        for (key, value) in AIFlushDict {
+            if value >= 5 {
+                currentSuit = key
+                result.append(key)
+            }
+        }
+        var cardNumList:[Int] = []
+        //        for (key, value) in PlayerCardNum {
+        //            if value == currentSuit  {
+        //                cardNumList.append(key)
+        //            }
+        //        }
+        for (key, value) in AICardNum {
+            for (key, value) in value {
+                if value == currentSuit  {
+                    cardNumList.append(key)
+                }
+            }
+        }
+        
+        let sortedCardNumList:[Int] = cardNumList.sorted()
+        print(sortedCardNumList)
+        
+        
+        if sortedCardNumList.count >= 5 {
+            if sortedCardNumList.last == 14{
+                if sortedCardNumList[sortedCardNumList.count - 2] == 13{
+                    if sortedCardNumList[sortedCardNumList.count - 3] == 12{
+                        if sortedCardNumList[sortedCardNumList.count - 4] == 11{
+                            if sortedCardNumList[sortedCardNumList.count - 5] == 10{
+                                AIHandRank = 10
+                            }
+                        }
+                    }
+                }
+            }
+            
+            if sortedCardNumList[0] + 1 == sortedCardNumList[1]{
+                print("1")
+                if sortedCardNumList[1] + 1 == sortedCardNumList[2]{
+                    print("2")
+                    if sortedCardNumList[2] + 1 == sortedCardNumList[3]{
+                        print("3")
+                        if sortedCardNumList[3] + 1 == sortedCardNumList[4]{
+                            print("4")
+                            
+                            if AIHandRank <= 9{
+                                print("5")
+                                AIHandRank = 9
+                                
+                            }
+                        }
+                    }
+                }
+            }
+            if sortedCardNumList.count >= 6{
+                if sortedCardNumList[1] + 1 == sortedCardNumList[2]{
+                    if sortedCardNumList[2] + 1 == sortedCardNumList[3]{
+                        if sortedCardNumList[3] + 1 == sortedCardNumList[4]{
+                            if sortedCardNumList[4] + 1 == sortedCardNumList[5]{
+                                
+                                if AIHandRank <= 9{
+                                    AIHandRank = 9
+                                }
+                            }
+                        }
+                    }
+                }
+                if sortedCardNumList.count == 7{
+                    
+                    if sortedCardNumList[2] + 1 == sortedCardNumList[3]{
+                        if sortedCardNumList[3] + 1 == sortedCardNumList[4]{
+                            if sortedCardNumList[4] + 1 == sortedCardNumList[5]{
+                                if sortedCardNumList[5] + 1 == sortedCardNumList[6]{
+                                    if AIHandRank <= 9{
+                                        AIHandRank = 9
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if result.count >= 1{
+            if AIHandRank <= 5{
+                AIHandRank = 5
             }
         }
         
@@ -260,6 +466,10 @@ struct Poker: View {
         Rvalue4 = String(River[3].dropFirst())
         let Rsuit5 = River[4].first!
         Rvalue5 = String(River[4].dropFirst())
+        let AIsuit1 = AIHand[0].first!
+        AIvalue1 = String(AIHand[0].dropFirst())
+        let AIsuit2 = AIHand[1].first!
+        AIvalue2 = String(AIHand[1].dropFirst())
         
         
         if value1 == "A"{
@@ -285,6 +495,30 @@ struct Poker: View {
         }
         if value2 == "J"{
             value2 = "11"
+        }
+        if AIvalue1 == "A"{
+            AIvalue1 = "14"
+        }
+        if AIvalue1 == "K"{
+            AIvalue1 = "13"
+        }
+        if AIvalue1 == "Q"{
+            AIvalue1 = "12"
+        }
+        if AIvalue1 == "J"{
+            AIvalue1 = "11"
+        }
+        if AIvalue2 == "A"{
+            AIvalue2 = "14"
+        }
+        if AIvalue2 == "K"{
+            AIvalue2 = "13"
+        }
+        if AIvalue2 == "Q"{
+            AIvalue2 = "12"
+        }
+        if AIvalue2 == "J"{
+            AIvalue2 = "11"
         }
         if Rvalue1 == "A"{
             Rvalue1 = "14"
@@ -350,9 +584,12 @@ struct Poker: View {
         //        PlayerCardNum = [Int(value1)!:String(describing: suit1),Int(value2)!:String(describing: suit2),Int(Rvalue1)!:String(describing: Rsuit1),Int(Rvalue2)!:String(describing: Rsuit2),Int(Rvalue3)!:String(describing: Rsuit3),Int(Rvalue4)!:String(describing: Rsuit4),Int(Rvalue5)!:String(describing: Rsuit5)]
         
         PlayerCardNum = [1:[Int(value1)!:String(describing: suit1)],2:[Int(value2)!:String(describing: suit2)],3:[Int(Rvalue1)!:String(describing: Rsuit1)],4:[Int(Rvalue2)!:String(describing: Rsuit2)],5:[Int(Rvalue3)!:String(describing: Rsuit3)],6:[Int(Rvalue4)!:String(describing: Rsuit4)],7:[Int(Rvalue5)!:String(describing: Rsuit5)]]
+        AICardNum = [1:[Int(AIvalue1)!:String(describing: AIsuit1)],2:[Int(AIvalue2)!:String(describing: AIsuit2)],3:[Int(Rvalue1)!:String(describing: Rsuit1)],4:[Int(Rvalue2)!:String(describing: Rsuit2)],5:[Int(Rvalue3)!:String(describing: Rsuit3)],6:[Int(Rvalue4)!:String(describing: Rsuit4)],7:[Int(Rvalue5)!:String(describing: Rsuit5)]]
         
         PairPlayer()
+        PairAI()
         PlayerFlush()
+        AIFlush()
     }
     
     func NextRound(){

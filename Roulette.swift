@@ -1,225 +1,265 @@
 import SwiftUI
 
-struct Bet {
-    let name: String
-    let covers: [Int]
-    let payout: Int
-}
+enum BetChoice { case none, oneToOne, twoToOne, thirtyFiveToOne }
 
 struct Roulette: View {
     @AppStorage("cash") var cash: Int = 5000
     
-    let pockets = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34,
-                   6, 27, 13, 36, 11, 30, 8, 23, 10, 5,
-                   24, 16, 33, 1, 20, 14, 31, 9, 22, 18,
-                   29, 7, 28, 12, 35, 3, 26]
-    let slice = 360.0 / 37.0
+    let myColor = Color(red: 107/255, green: 13/255, blue: 14/255)
+    let pockets = [
+        0,32,15,19,4,21,2,25,17,34,
+        6,27,13,36,11,30,8,23,10,5,
+        24,16,33,1,20,14,31,9,22,18,
+        29,7,28,12,35,3,26
+    ]
+    let segmentAngle = 9.72972972972973
+    let redNumbers: Set<Int> = [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]
     
-    private var bets: [Bet] {
-        var b = [Bet]()
-        
-        // Even-money (1:1)
-        let reds   = Set([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36])
-        let blacks = Set((1...36).filter { !reds.contains($0) })
-        b += [
-            Bet(name: "Red",        covers: Array(reds),   payout: 1),
-            Bet(name: "Black",      covers: Array(blacks), payout: 1),
-            Bet(name: "Odd",        covers: (1...36).filter{$0%2==1}, payout:1),
-            Bet(name: "Even",       covers: (1...36).filter{$0%2==0}, payout:1),
-            Bet(name: "Low (1–18)", covers: Array(1...18), payout: 1),
-            Bet(name: "High (19–36)",covers: Array(19...36), payout: 1)
-        ]
-        
-        // Dozens (2:1)
-        b += [
-            Bet(name: "1st 12", covers: Array(1...12),   payout: 2),
-            Bet(name: "2nd 12", covers: Array(13...24),  payout: 2),
-            Bet(name: "3rd 12", covers: Array(25...36),  payout: 2)
-        ]
-        
-        // Straight-up (35:1)
-        b += (0...36).map { n in
-            Bet(name: "\(n)", covers: [n], payout: 35)
-        }
-        
-        return b
-    }
-    
-    @State var rotation  = 0.0
-       @State var wagerText = "100"
-       @State var toast     = ""
-       @State var showToast = false
+    @State var rotation: Double = 0
+    @State var betChoice: BetChoice = .none
+    @State var selectedColorRed: Bool? = nil
+    @State var selectedDozen: Int? = nil
+    @State var straightNumber: Int? = nil
+    @State var selectedBetAmount: Int? = nil
+    @State var gameMessage: String = "Place your bet…"
+    @State var amountLabel: String = "$ Bet:"
+    @State var oneToOneLabel: String = "1:1"
+    @State var twoToOneLabel: String = "2:1"
+    @State var thirtyFiveLabel: String = "35:1"
     
     var body: some View {
-        Image(systemName: "arrow.down")
-            .resizable()
-            .frame(width:75, height: 75)
-            .offset(x:-20,y:30)
-        HStack{
-            Image("rouletteWheel")
-                .resizable()
-                .aspectRatio(1, contentMode: .fit)
-                .rotationEffect(.degrees(rotation))
-                .animation(.easeOut(duration: 4), value: rotation)
-            
-            if let uiImage = loadWheelImage() {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .aspectRatio(1, contentMode: .fit)
-                    .rotationEffect(.degrees(rotation))
-                    .animation(.easeOut(duration: 4), value: rotation)
-            }
-            
-            Button("Spin", action: spin)
-                .frame(width:50, height:25)
-                .background(.green)
-                .foregroundColor(.white)
-        }
-        Text("Make your choice:")
-            .font(.title)
-            .bold()
-        HStack{
-            Button("Red") {
+        ZStack{
+            Rectangle()
+                .fill()
+                .foregroundStyle(myColor)
+            VStack {
+                Text("Cash: $\(cash)")
+                    .font(.title2)
+                    .bold()
                 
-            }
-            Button("Black") {
+                Text(gameMessage)
+                    .font(.headline)
+                    .padding(.top)
                 
-            }
-            Button("Even") {
+                ZStack {
+                    Image("rouletteWheel")
+                        .resizable()
+                        .aspectRatio(1, contentMode: .fit)
+                        .rotationEffect(.degrees(rotation))
+                        .animation(.easeOut(duration: 4), value: rotation)
+                    Image(systemName: "arrow.up")
+                        .font(.system(size: 40, weight: .bold))
+                        .foregroundColor(.black)
+                        .offset(y: -100)
+                }
                 
-            }
-            Button("Odd") {
+                HStack {
+                    // Amount menu
+                    Menu(amountLabel) {
+                        ForEach([50, 100, 150, 200], id: \.self) { amt in
+                            Button("$\(amt)") {
+                                selectedBetAmount = amt
+                                amountLabel = "\(amt)"
+                                gameMessage = "Bet amount set to $\(amt)"
+                            }
+                        }
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(selectedBetAmount != nil && betChoice != .none)
+                    
+                    Menu(oneToOneLabel) {
+                        Button("Red") {
+                            guard let amt = selectedBetAmount else { gameMessage = "Select amount first."; return }
+                            betChoice = .oneToOne
+                            selectedColorRed = true
+                            oneToOneLabel = "Red"
+                            gameMessage = "Betting $\(amt) on Red"
+                        }
+                        Button("Black") {
+                            guard let amt = selectedBetAmount else { gameMessage = "Select amount first."; return }
+                            betChoice = .oneToOne
+                            selectedColorRed = false
+                            oneToOneLabel = "Black"
+                            gameMessage = "Betting $\(amt) on Black"
+                        }
+                        Button("Odd") {
+                            guard let amt = selectedBetAmount else { gameMessage = "Select amount first."; return }
+                            betChoice = .oneToOne
+                            oneToOneLabel = "Odd"
+                            gameMessage = "Betting $\(amt) on Odd"
+                        }
+                        Button("Even") {
+                            guard let amt = selectedBetAmount else { gameMessage = "Select amount first."; return }
+                            betChoice = .oneToOne
+                            oneToOneLabel = "Even"
+                            gameMessage = "Betting $\(amt) on Even"
+                        }
+                        Button("Low (1–18)") {
+                            guard let amt = selectedBetAmount else { gameMessage = "Select amount first."; return }
+                            betChoice = .oneToOne
+                            oneToOneLabel = "Low"
+                            gameMessage = "Betting $\(amt) on Low (1–18)"
+                        }
+                        Button("High (19–36)") {
+                            guard let amt = selectedBetAmount else { gameMessage = "Select amount first."; return }
+                            betChoice = .oneToOne
+                            oneToOneLabel = "High"
+                            gameMessage = "Betting $\(amt) on High (19–36)"
+                        }
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(selectedBetAmount != nil && betChoice != .none)
+                    
+                    Menu(twoToOneLabel) {
+                        Button("1st Dozen") {
+                            guard let amt = selectedBetAmount else { gameMessage = "Select amount first."; return }
+                            betChoice = .twoToOne
+                            selectedDozen = 1
+                            twoToOneLabel = "1st Dozen"
+                            gameMessage = "Betting $\(amt) on 1st Dozen"
+                        }
+                        Button("2nd Dozen") {
+                            guard let amt = selectedBetAmount else { gameMessage = "Select amount first."; return }
+                            betChoice = .twoToOne
+                            selectedDozen = 2
+                            twoToOneLabel = "2nd Dozen"
+                            gameMessage = "Betting $\(amt) on 2nd Dozen"
+                        }
+                        Button("3rd Dozen") {
+                            guard let amt = selectedBetAmount else { gameMessage = "Select amount first."; return }
+                            betChoice = .twoToOne
+                            selectedDozen = 3
+                            twoToOneLabel = "3rd Dozen"
+                            gameMessage = "Betting $\(amt) on 3rd Dozen"
+                        }
+                        Button("Column 1") {
+                            guard let amt = selectedBetAmount else { gameMessage = "Select amount first."; return }
+                            betChoice = .twoToOne
+                            selectedDozen = 4
+                            twoToOneLabel = "Column 1"
+                            gameMessage = "Betting $\(amt) on Column 1"
+                        }
+                        Button("Column 2") {
+                            guard let amt = selectedBetAmount else { gameMessage = "Select amount first."; return }
+                            betChoice = .twoToOne
+                            selectedDozen = 5
+                            twoToOneLabel = "Column 2"
+                            gameMessage = "Betting $\(amt) on Column 2"
+                        }
+                        Button("Column 3") {
+                            guard let amt = selectedBetAmount else { gameMessage = "Select amount first."; return }
+                            betChoice = .twoToOne
+                            selectedDozen = 6
+                            twoToOneLabel = "Column 3"
+                            gameMessage = "Betting $\(amt) on Column 3"
+                        }
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(selectedBetAmount != nil && betChoice != .none)
+                    
+                    Menu(thirtyFiveLabel) {
+                        ForEach(0...36, id: \.self) { num in
+                            Button("\(num)") {
+                                guard let amt = selectedBetAmount else { gameMessage = "Select amount first."; return }
+                                betChoice = .thirtyFiveToOne
+                                straightNumber = num
+                                thirtyFiveLabel = "\(num)"
+                                gameMessage = "Betting $\(amt) on \(num)"
+                            }
+                        }
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(selectedBetAmount != nil && betChoice != .none)
+                    
+                    Button("Clear") {
+                        selectedBetAmount = nil
+                        betChoice = .none
+                        selectedColorRed = nil
+                        selectedDozen = nil
+                        straightNumber = nil
+                        amountLabel = "$ Bet:"
+                        oneToOneLabel = "1:1"
+                        twoToOneLabel = "2:1"
+                        thirtyFiveLabel = "35:1"
+                        gameMessage = "Place your bet…"
+                    }
+                    .buttonStyle(.bordered)
+                }
                 
-            }
-        }
-        HStack{
-            Button("0") {
-                
-            }
-            Button("1") {
-                
-            }
-            Button("2") {
-                
-            }
-            Button("3") {
-                
-            }
-            Button("4") {
-                
-            }
-        }
-        HStack{
-            Button("5") {
-                
-            }
-            Button("6") {
-                
-            }
-            Button("7") {
-                
-            }
-            Button("8") {
-                
-            }
-            Button("10") {
-                
-            }
-            Button("11") {
-                
-            }
-        }
-        HStack{
-            Button("12") {
-                
-            }
-            Button("13") {
-                
-            }
-            Button("14") {
-                
-            }
-            Button("15") {
-                
-            }
-            Button("16") {
-                
-            }
-            Button("17") {
-                
-            }
-        }
-        HStack{
-            Button("18") {
-                
-            }
-            Button("19") {
-                
-            }
-            Button("20") {
-                
-            }
-            Button("21") {
-                
-            }
-            Button("22") {
-                
-            }
-            Button("23") {
-                
-            }
-        }
-        HStack{
-            Button("24") {
-                
-            }
-            Button("25") {
-                
-            }
-            Button("26") {
-                
-            }
-            Button("27") {
-                
-            }
-            Button("28") {
-                
-            }
-            Button("29") {
-                
-            }
-        }
-        HStack{
-            Button("30") {
-                
-            }
-            Button("31") {
-                
-            }
-            Button("32") {
-                
-            }
-            Button("33") {
-                
-            }
-            Button("34") {
-                
-            }
-            Button("35") {
-                
-            }
-            Button("36") {
-                
+                Button("Spin") {
+                    spinWheel()
+                }
+                .buttonStyle(.borderedProminent)
+                .font(.title2)
+                .disabled(selectedBetAmount == nil || betChoice == .none)
             }
         }
     }
-    func loadWheelImage() -> UIImage? {
-        let path = "/mnt/data/a34fad5f-2621-4067-aca1-7f9ecaff2ba7-removebg-preview.png"
-        guard let data = try? Data(contentsOf: URL(fileURLWithPath: path)) else { return nil }
-        return UIImage(data: data)
-    }
-    func spin() {
-        let extra = Double.random(in: 3...5) * 360
-        rotation += extra
+    
+    func spinWheel() {
+        let targetIndex = Int.random(in: 0..<pockets.count)
+        let pocketCenter = Double(targetIndex) * segmentAngle + (segmentAngle / 2)
+        let landingOffset = 360 - pocketCenter
+        rotation = 5 * 360 + landingOffset
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+            let raw = rotation.truncatingRemainder(dividingBy: 360)
+            let pointerAngle = (360 - raw + (segmentAngle / 2)).truncatingRemainder(dividingBy: 360)
+            var landedIndex = 0
+            for i in 0..<pockets.count {
+                let start = Double(i) * segmentAngle
+                let end = start + segmentAngle
+                if pointerAngle >= start && pointerAngle < end {
+                    landedIndex = i
+                    break
+                }
+            }
+            let landedNumber = pockets[landedIndex]
+            let isRed = redNumbers.contains(landedNumber)
+            guard let amount = selectedBetAmount else {
+                gameMessage = "Landed on \(landedNumber) — no bet amount."
+                return
+            }
+            switch betChoice {
+            case .oneToOne:
+                if landedNumber != 0, isRed == selectedColorRed {
+                    cash += amount
+                    gameMessage = "Landed on \(landedNumber) — you win $\(amount)!"
+                } else {
+                    cash -= amount
+                    gameMessage = "Landed on \(landedNumber) — you lose $\(amount)..."
+                }
+            case .twoToOne:
+                var win = false
+                if let sel = selectedDozen {
+                    switch sel {
+                    case 1: win = (1...12).contains(landedNumber)
+                    case 2: win = (13...24).contains(landedNumber)
+                    case 3: win = (25...36).contains(landedNumber)
+                    case 4: win = [1,4,7,10,13,16,19,22,25,28,31,34].contains(landedNumber)
+                    case 5: win = [2,5,8,11,14,17,20,23,26,29,32,35].contains(landedNumber)
+                    case 6: win = [3,6,9,12,15,18,21,24,27,30,33,36].contains(landedNumber)
+                    default: win = false
+                    }
+                }
+                if win {
+                    cash += amount * 2
+                    gameMessage = "Landed on \(landedNumber) — you win $\(amount * 2)!"
+                } else {
+                    cash -= amount
+                    gameMessage = "Landed on \(landedNumber) — you lose $\(amount)..."
+                }
+            case .thirtyFiveToOne:
+                if landedNumber == straightNumber {
+                    cash += amount * 35
+                    gameMessage = "Landed on \(landedNumber) — you win $\(amount * 35)!"
+                } else {
+                    cash -= amount
+                    gameMessage = "Landed on \(landedNumber) — you lose $\(amount)..."
+                }
+            case .none:
+                gameMessage = "Landed on \(landedNumber) — no bet placed."
+            }
+        }
     }
 }

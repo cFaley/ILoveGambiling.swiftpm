@@ -1,10 +1,9 @@
 import SwiftUI
-
-
 struct Poker: View {
     @State var cardPool = [""]
     @State var yourHand = [""]
     @State var AIHand = [""]
+    @State var AIHandVisual = ["BC","BC"]
     @State var River = [""]
     @State var RoundNum = 0
     @State var YourHandRank = 0
@@ -25,6 +24,10 @@ struct Poker: View {
     @State var AIFlushDict: [String : Int] = ["C":0,"S":0,"D":0,"H":0]
     @State var PlayerCardNum: [Int : [Int:String]] = [:]
     @State var AICardNum: [Int : [Int:String]] = [:]
+    @State var YourBet = 100
+    @State var addToBet = 0
+    @State var IsBetting = false
+    @AppStorage("cash") var cash: Int = 5000
     var body: some View {
         VStack{
             
@@ -37,25 +40,47 @@ struct Poker: View {
             //                    River = ["HJ","HK","HQ","CA","C10"]
             //                    yourHand = ["H10","HA"]
             //                }
+            Text("Cash:$\(cash)")
             if RoundNum >= 4{
                 
                 
                 if YourHandRank > AIHandRank{
                     Text("You Win!")
+                        .onAppear(){
+                            cash += YourBet
+                            YourBet = 0
+                        }
                 }
                 if AIHandRank > YourHandRank{
                     Text("AIWins")
+                        .onAppear(){
+                            cash -= YourBet
+                            YourBet = 0
+                        }
                 }
                 if YourHandRank == AIHandRank{
-                    Text("Tie!")
+                    if YourHighCard > AIHighCard{
+                        Text("You Win!")
+                            .onAppear(){
+                                cash += YourBet
+                                YourBet = 0
+                            }
+                    }
+                    else{
+                        Text("AIWins")
+                            .onAppear(){
+                                cash -= YourBet
+                                YourBet = 0
+                            }
+                    }
                 }
             }
-            Text("\(AIHandRank)")
+            //            Text("\(AIHandRank)")
             Text("AI hand:")
             HStack{
-                ForEach(0..<AIHand.count, id: \.self){card in
+                ForEach(0..<AIHandVisual.count, id: \.self){card in
                     //                    Text("\(AIHand[card])")
-                    Image("\(AIHand[card])")
+                    Image("\(AIHandVisual[card])")
                         .resizable()
                         .frame(width: 50, height: 75, alignment: .center)
                 }
@@ -78,31 +103,53 @@ struct Poker: View {
                         .frame(width: 50, height: 75, alignment: .center)
                 }
             }
-            Text("\(YourHandRank)")
+            //            Text("\(YourHandRank)")
+            Text("Current bet:$\(YourBet)")
             HStack{
                 Button("Call") {
                     if RoundNum == 3{
                         RateHands()
+                        AIHandVisual = AIHand
                     }
                     NextRound()
                 }
+                if RoundNum > 0{
+                    if RoundNum < 3{
+                        if IsBetting == false{
+                            Button("Bet") {
+                                IsBetting = true
+                            }
+                        }
+                        if IsBetting == true{
+                            
+                        }
+                        
+                    }
+                }
+                
             }
             Button("New Game") {
                 StartGame()
             }
+            
         }
         .onAppear(){
             StartGame()
             
         }
+        
     }
     func StartGame(){
+        cash -= YourBet
         YourHandRank = 0
+        AIHandRank = 0
         RoundNum = 0
+        YourBet = 0
         River = []
         cardPool = []
         yourHand = []
         AIHand = []
+        AIHandVisual = ["BC","BC"]
         cardPool = ["CA","SA","HA","DA","CK","SK","HK","DK","CQ","SQ","HQ","DQ","CJ","SJ","HJ","DJ","C10","S10","H10","D10","C9","S9","H9","D9","C8","S8","H8","D8","C7","S7","H7","D7","C6","S6","H6","D6","C5","S5","H5","D5","C4","S4","H4","D4","C3","S3","H3","D3","C2","S2","H2","D2"]
         let card1 = Int.random(in: 1..<cardPool.count)
         yourHand.append(cardPool[card1])
@@ -451,6 +498,20 @@ struct Poker: View {
         }
         
     }
+    func HighCard(){
+        if Int(value1)! > Int(value2)!{
+            YourHighCard = Int(value1)!
+        }
+        else{
+            YourHighCard = Int(value2)!
+        }
+        if Int(AIvalue1)! > Int(AIvalue2)!{
+            AIHighCard = Int(AIvalue1)!
+        }
+        else{
+            AIHighCard = Int(AIvalue2)!
+        }
+    }
     func RateHands(){
         let suit1 = yourHand[0].first!
         value1 = String(yourHand[0].dropFirst())
@@ -585,7 +646,7 @@ struct Poker: View {
         
         PlayerCardNum = [1:[Int(value1)!:String(describing: suit1)],2:[Int(value2)!:String(describing: suit2)],3:[Int(Rvalue1)!:String(describing: Rsuit1)],4:[Int(Rvalue2)!:String(describing: Rsuit2)],5:[Int(Rvalue3)!:String(describing: Rsuit3)],6:[Int(Rvalue4)!:String(describing: Rsuit4)],7:[Int(Rvalue5)!:String(describing: Rsuit5)]]
         AICardNum = [1:[Int(AIvalue1)!:String(describing: AIsuit1)],2:[Int(AIvalue2)!:String(describing: AIsuit2)],3:[Int(Rvalue1)!:String(describing: Rsuit1)],4:[Int(Rvalue2)!:String(describing: Rsuit2)],5:[Int(Rvalue3)!:String(describing: Rsuit3)],6:[Int(Rvalue4)!:String(describing: Rsuit4)],7:[Int(Rvalue5)!:String(describing: Rsuit5)]]
-        
+        HighCard()
         PairPlayer()
         PairAI()
         PlayerFlush()
@@ -603,6 +664,7 @@ struct Poker: View {
             let RiverCard3 = Int.random(in: 1..<cardPool.count)
             River.append(cardPool[RiverCard3])
             cardPool.remove(at: RiverCard3)
+            YourBet += 100
         }
         if RoundNum == 1{
             let RiverCard4 = Int.random(in: 1..<cardPool.count)
@@ -617,5 +679,4 @@ struct Poker: View {
         
         RoundNum += 1
     }
-    
 }

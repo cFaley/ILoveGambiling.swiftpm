@@ -12,7 +12,6 @@ struct ContentView: View {
             ZStack{
                 
                 VStack {
-                    
                     Text("I Love Gambling❤️")
                         .foregroundStyle(.white)
                         .padding()
@@ -24,70 +23,73 @@ struct ContentView: View {
                             .fill()
                             .foregroundStyle(myColor)
                         NavigationStack{
-                            Image("gambilingMan")
-                                .resizable()
-                                .scaledToFill()
-                            
-                            NavigationLink(destination: Slots()) {
-                                ZStack{
-                                    Rectangle()
-                                        .fill()
-                                        .foregroundStyle(myColor)
-                                    RoundedRectangle(cornerRadius: 100)
-                                        .frame(width: 300, height: 75, alignment: .center)
-                                    Text("Slots")
-                                        .font(.largeTitle)
-                                        .foregroundStyle(.white)
-                                }
-                            }
-                            
-                            NavigationLink(destination: BlackJack()) {
-                                ZStack{
-                                    Rectangle()
-                                        .fill()
-                                        .foregroundStyle(myColor)
-                                    RoundedRectangle(cornerRadius: 100)
-                                        .frame(width: 300, height: 75, alignment: .center)
-                                    Text("BlackJack")
-                                        .font(.largeTitle)
-                                        .foregroundStyle(.white)
+                            ZStack{
+                                Rectangle()
+                                    .fill()
+                                    .foregroundStyle(myColor)
+                                
+                                VStack{
                                     
-                                }
-                            }
-                            NavigationLink(destination: Poker()) {
-                                ZStack{
-                                    Rectangle()
-                                        .fill()
-                                        .foregroundStyle(myColor)
-                                    RoundedRectangle(cornerRadius: 100)
-                                        .frame(width: 300, height: 75, alignment: .center)
-                                    Text("Poker")
-                                        .font(.largeTitle)
-                                        .foregroundStyle(.white)
-                                }
-                            }
-                            NavigationLink(destination: Roulette()) {
-                                ZStack{
-                                    Rectangle()
-                                        .fill()
-                                        .foregroundStyle(myColor)
-                                    RoundedRectangle(cornerRadius: 100)
-                                        .frame(width: 300, height: 75, alignment: .center)
-                                    Text("Roulette")
-                                        .font(.largeTitle)
-                                        .foregroundStyle(.white)
-                                }
-                            }
-                            NavigationLink(destination: DoubleOrNothing()) {
-                                ZStack{
-                                    Rectangle()
-                                        .fill()
-                                        .foregroundStyle(myColor)
-                                    RoundedRectangle(cornerRadius: 100)
-                                        .frame(width: 300, height: 75, alignment: .center)
-                                    Text("Double or Nothing")
-                                        .font(.largeTitle)
-                                        .foregroundStyle(.white)
+                                    Image("gambilingMan")
+                                        .resizable()
+                                        .scaledToFill()
+                                    
+                                    NavigationLink(destination: Slots()) {
+                                        ZStack{
+                                            Rectangle()
+                                                .fill()
+                                                .foregroundStyle(myColor)
+                                            RoundedRectangle(cornerRadius: 100)
+                                                .frame(width: 300, height: 75, alignment: .center)
+                                            Text("Slots")
+                                                .font(.largeTitle)
+                                                .foregroundStyle(.white)
+                                        }
+                                    }
+                                    
+                                    NavigationLink(destination: BlackJack()) {
+                                        ZStack{
+                                            Rectangle()
+                                                .fill()
+                                                .foregroundStyle(myColor)
+                                            RoundedRectangle(cornerRadius: 100)
+                                                .frame(width: 300, height: 75, alignment: .center)
+                                            Text("BlackJack")
+                                                .font(.largeTitle)
+                                                .foregroundStyle(.white)
+                                            
+                                        }
+                                    }
+                                    NavigationLink(destination: Poker()) {
+                                        ZStack{
+                                            Rectangle()
+                                                .fill()
+                                                .foregroundStyle(myColor)
+                                            RoundedRectangle(cornerRadius: 100)
+                                                .frame(width: 300, height: 75, alignment: .center)
+                                            Text("Poker")
+                                                .font(.largeTitle)
+                                                .foregroundStyle(.white)
+                                        }
+                                    }
+                                    NavigationLink(destination: Roulette()) {
+                                        ZStack{
+                                            RoundedRectangle(cornerRadius: 100)
+                                                .frame(width: 300, height: 75, alignment: .center)
+                                            Text("Roulette")
+                                                .font(.largeTitle)
+                                                .foregroundStyle(.white)
+                                        }
+                                    }
+                                    NavigationLink(destination: DoubleOrNothing()) {
+                                        ZStack{
+                                            RoundedRectangle(cornerRadius: 100)
+                                                .frame(width: 300, height: 75, alignment: .center)
+                                            Text("Double or Nothing")
+                                                .font(.largeTitle)
+                                                .foregroundStyle(.white)
+                                        }
+                                    }
                                 }
                             }
                         }

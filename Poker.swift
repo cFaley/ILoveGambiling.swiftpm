@@ -25,6 +25,7 @@ struct Poker: View {
     @State var PlayerCardNum: [Int : [Int:String]] = [:]
     @State var AICardNum: [Int : [Int:String]] = [:]
     @State var YourBet = 100
+    @State var AIBet = 100
     @State var addToBet = 0
     @State var IsBetting = false
     @AppStorage("cash") var cash: Int = 5000
@@ -114,24 +115,34 @@ struct Poker: View {
                     NextRound()
                 }
                 if RoundNum > 0{
-                    if RoundNum < 3{
-                        if IsBetting == false{
-                            Button("Bet") {
-                                IsBetting = true
+                    if RoundNum < 4{
+                        
+                        Menu("Bet") {
+                            ForEach([50, 100, 150, 200], id: \.self) { amt in
+                                Button("$\(amt)") {
+                                    YourBet += amt
+                                }
+                                .buttonStyle(.borderedProminent)
                             }
-                        }
-                        if IsBetting == true{
                             
+                            
+                            
+                            
+                            
+                        }
+                        Button("Fold") {
+                            StartGame()
                         }
                         
                     }
                 }
                 
             }
-            Button("New Game") {
-                StartGame()
+            if RoundNum >= 4{
+                Button("New Game") {
+                    StartGame()
+                }
             }
-            
         }
         .onAppear(){
             StartGame()
@@ -139,6 +150,7 @@ struct Poker: View {
         }
         
     }
+    
     func StartGame(){
         cash -= YourBet
         YourHandRank = 0
@@ -651,6 +663,54 @@ struct Poker: View {
         PairAI()
         PlayerFlush()
         AIFlush()
+    }
+    
+    func AIPlay(){
+        var RandomNum = Int.random(in: 1..<100)
+        
+        if AIHandRank >= 8 {
+            AIBet += 1000
+        }else{
+            
+            
+            if AIHandRank >= 6 {
+                if RandomNum < 10 {
+                    cash += AIBet
+                    YourBet = 0
+                    AIBet = 0
+                    StartGame()
+                    
+                }else{
+                    
+                    
+                    if RandomNum < 20 {
+                        AIBet += 100
+                        
+                    }else{
+                        AIBet += 1000
+                    }
+                }
+            }else{
+                if AIHandRank >= 4 {
+                    if RandomNum < 10 {
+                        cash += AIBet
+                        YourBet = 0
+                        AIBet = 0
+                        StartGame()
+                        
+                    }else{
+                        
+                        
+                        if RandomNum < 60 {
+                            AIBet += 100
+                            
+                        }else{
+                            AIBet += 1000
+                        }
+                    }
+                }
+            }
+        }
     }
     
     func NextRound(){

@@ -9,6 +9,7 @@ struct ContentView: View {
             Rectangle()
                 .fill()
                 .foregroundStyle(myColor)
+         
             ZStack{
                 
                 VStack {

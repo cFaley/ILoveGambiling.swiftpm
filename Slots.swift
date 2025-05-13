@@ -8,69 +8,71 @@ struct Slots: View {
 //    @State var count = 0
     @AppStorage("cash") var cash: Int = 5000
     @State var canSpin = true
-    
+    let myColor = Color(red: 107/255, green: 13/255, blue: 14/255)
     var body: some View {
-        VStack {
-            Text("Cash $\(cash)")
-            HStack{
-                ZStack{
-                    Rectangle()
-                        .foregroundStyle(.gray)
-//                    Text("\(slot1)")
-                    Image("Image\(slot1)")
-                        .resizable()
-                        .frame(width: 100, height: 100)
+        ZStack{
+            myColor.ignoresSafeArea()
+            VStack {
+                Text("Cash $\(cash)")
+                HStack{
+                    ZStack{
+                        Rectangle()
+                            .foregroundStyle(.gray)
+                        //                    Text("\(slot1)")
+                        Image("Image\(slot1)")
+                            .resizable()
+                            .frame(width: 100, height: 100)
+                        
+                    }
+                    .frame(width: 100, height: 200, alignment: .leading)
+                    ZStack{
+                        Rectangle()
+                            .foregroundStyle(.gray)
+                        //                    Text("\(slot2)")
+                        Image("Image\(slot2)")
+                            .resizable()
+                            .frame(width: 100, height: 100)
+                    }
+                    .frame(width: 100, height: 200, alignment: .center)
+                    ZStack{
+                        Rectangle()
+                            .foregroundStyle(.gray)
+                        //                    Text("\(slot3)")
+                        Image("Image\(slot3)")
+                            .resizable()
+                            .frame(width: 100, height: 100)
+                    }
+                    .frame(width: 100, height: 200, alignment: .trailing)
+                }
+                Button {
+                    //                slot1 = Int.random(in: 1..<4)
+                    //                slot2 = Int.random(in: 1..<4)
+                    //                slot3 = Int.random(in: 1..<4)
+                    if canSpin == true{
+                        
+                        
+                        cash -= 100
+                        Spin()
+                    }
+                    //                                IsSpinning = false
                     
+                } label: {
+                    ZStack{
+                        RoundedRectangle(cornerRadius: 100)
+                            .frame(width: 300, height: 100, alignment: .center)
+                        Text("Spin!!!")
+                            .font(.largeTitle)
+                            .foregroundStyle(.black)
+                    }
                 }
-                .frame(width: 100, height: 200, alignment: .leading)
-                ZStack{
-                    Rectangle()
-                        .foregroundStyle(.gray)
-//                    Text("\(slot2)")
-                    Image("Image\(slot2)")
-                        .resizable()
-                        .frame(width: 100, height: 100)
-                }
-                .frame(width: 100, height: 200, alignment: .center)
-                ZStack{
-                    Rectangle()
-                        .foregroundStyle(.gray)
-//                    Text("\(slot3)")
-                    Image("Image\(slot3)")
-                        .resizable()
-                        .frame(width: 100, height: 100)
-                }
-                .frame(width: 100, height: 200, alignment: .trailing)
+                Text("$100 Per Spin")
+                    .font(.largeTitle)
+                Image("Chart1")
+                    .resizable()
+                    .frame(width: 300, height: 200, alignment: .center)
             }
-            Button {
-                //                slot1 = Int.random(in: 1..<4)
-                //                slot2 = Int.random(in: 1..<4)
-                //                slot3 = Int.random(in: 1..<4)
-                if canSpin == true{
-                    
-                    
-                    cash -= 100
-                    Spin()
-                }
-                //                                IsSpinning = false
-                
-            } label: {
-                ZStack{
-                    RoundedRectangle(cornerRadius: 100)
-                        .frame(width: 300, height: 100, alignment: .center)
-                    Text("Spin!!!")
-                        .font(.largeTitle)
-                        .foregroundStyle(.black)
-                }
-            }
-            Text("$100 Per Spin")
-                .font(.largeTitle)
-            Image("Chart1")
-                .resizable()
-                .frame(width: 300, height: 200, alignment: .center)
         }
     }
-
     func AddMoney() {
         if slot1 == 2{
             if slot2 == 2{

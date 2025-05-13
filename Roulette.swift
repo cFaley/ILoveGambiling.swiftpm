@@ -29,9 +29,7 @@ struct Roulette: View {
     
     var body: some View {
         ZStack{
-            Rectangle()
-                .fill()
-                .foregroundStyle(myColor)
+            myColor.ignoresSafeArea()
             VStack {
                 Text("Cash: $\(cash)")
                     .font(.title2)

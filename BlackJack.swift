@@ -11,7 +11,7 @@ struct Card: Identifiable {
 struct BlackJack: View {
     
     enum GamePhase { case betting, playing, handOver }
-    
+    let myColor = Color(red: 107/255, green: 13/255, blue: 14/255)
     @State var gamePhase: GamePhase = .betting
     @State var selectedBet: Int?    = nil
     @AppStorage("cash") var cash: Int = 5000
@@ -22,6 +22,7 @@ struct BlackJack: View {
     @State var playerBet: Int = 0
     var body: some View {
         ZStack{
+            myColor.ignoresSafeArea()
             VStack(spacing: 20) {
                 Text(gameMessage)
                     .font(.largeTitle)

@@ -1,5 +1,6 @@
 import SwiftUI
 struct Poker: View {
+    let myColor = Color(red: 107/255, green: 13/255, blue: 14/255)
     @State var cardPool = [""]
     @State var yourHand = [""]
     @State var AIHand = [""]
@@ -24,143 +25,169 @@ struct Poker: View {
     @State var AIFlushDict: [String : Int] = ["C":0,"S":0,"D":0,"H":0]
     @State var PlayerCardNum: [Int : [Int:String]] = [:]
     @State var AICardNum: [Int : [Int:String]] = [:]
+    @State var RiverShown = [""]
     @State var YourBet = 100
     @State var AIBet = 100
     @State var addToBet = 0
     @State var IsBetting = false
+    @State var AIfolded = false
     @AppStorage("cash") var cash: Int = 5000
     var body: some View {
-        VStack{
+        ZStack{
+            myColor.ignoresSafeArea()
             
-            //            ForEach(0..<cardPool.count, id: \.self){card in
-            //                Text("\(cardPool[card])")
-            //            }
-            //            Circle()
-            //                .frame(width: 100, height: 100, alignment: .center)
-            //                .onTapGesture {
-            //                    River = ["HJ","HK","HQ","CA","C10"]
-            //                    yourHand = ["H10","HA"]
-            //                }
-            Text("Cash:$\(cash)")
-            if RoundNum >= 4{
+            VStack{
                 
+                //            ForEach(0..<cardPool.count, id: \.self){card in
+                //                Text("\(cardPool[card])")
+                //            }
+                //            Circle()
+                //                .frame(width: 100, height: 100, alignment: .center)
+                //                .onTapGesture {
+                //                    River = ["HJ","HK","HQ","CA","C10"]
+                //                    yourHand = ["H10","HA"]
+                //                }
                 
-                if YourHandRank > AIHandRank{
-                    Text("You Win!")
+                Text("Cash:$\(cash)")
+                if AIfolded{
+                    Text("AI Folds")
                         .onAppear(){
-                            cash += YourBet
-                            YourBet = 0
+                            RoundNum = 5
+                            AIHandVisual = AIHand
                         }
                 }
-                if AIHandRank > YourHandRank{
-                    Text("AIWins")
-                        .onAppear(){
-                            cash -= YourBet
-                            YourBet = 0
-                        }
-                }
-                if YourHandRank == AIHandRank{
-                    if YourHighCard > AIHighCard{
+                if RoundNum >= 4{
+                    
+                    
+                    if YourHandRank > AIHandRank{
                         Text("You Win!")
                             .onAppear(){
                                 cash += YourBet
                                 YourBet = 0
                             }
                     }
-                    else{
+                    if AIHandRank > YourHandRank{
                         Text("AIWins")
                             .onAppear(){
                                 cash -= YourBet
                                 YourBet = 0
                             }
                     }
-                }
-            }
-            //            Text("\(AIHandRank)")
-            Text("AI hand:")
-            HStack{
-                ForEach(0..<AIHandVisual.count, id: \.self){card in
-                    //                    Text("\(AIHand[card])")
-                    Image("\(AIHandVisual[card])")
-                        .resizable()
-                        .frame(width: 50, height: 75, alignment: .center)
-                }
-            }
-            Text("river:")
-            HStack{
-                ForEach(0..<River.count, id: \.self){card in
-                    //                    Text("\(River[card])")
-                    Image("\(River[card])")
-                        .resizable()
-                        .frame(width: 50, height: 75, alignment: .center)
-                }
-            }
-            Text("Your Hand:")
-            HStack{
-                ForEach(0..<yourHand.count, id: \.self){card in
-                    //                    Text("\(yourHand[card])")
-                    Image("\(yourHand[card])")
-                        .resizable()
-                        .frame(width: 50, height: 75, alignment: .center)
-                }
-            }
-            //            Text("\(YourHandRank)")
-            Text("Current bet:$\(YourBet)")
-            HStack{
-                Button("Call") {
-                    if RoundNum == 3{
-                        RateHands()
-                        AIHandVisual = AIHand
+                    if YourHandRank == AIHandRank{
+                        if YourHighCard > AIHighCard{
+                            Text("You Win!")
+                                .onAppear(){
+                                    cash += YourBet
+                                    YourBet = 0
+                                }
+                        }
+                        else{
+                            Text("AIWins")
+                                .onAppear(){
+                                    cash -= YourBet
+                                    YourBet = 0
+                                }
+                        }
                     }
-                    NextRound()
                 }
-                if RoundNum > 0{
+                //            Text("\(AIHandRank)")
+                Text("AI hand:")
+                
+                HStack{
+                    ForEach(0..<AIHandVisual.count, id: \.self){card in
+                        //                    Text("\(AIHand[card])")
+                        Image("\(AIHandVisual[card])")
+                            .resizable()
+                            .frame(width: 50, height: 75, alignment: .center)
+                    }
+                }
+                Text("AI Bet:$\(AIBet)")
+                Text("river:")
+                HStack{
+                    ForEach(0..<RiverShown.count, id: \.self){card in
+                        //                    Text("\(River[card])")
+                        Image("\(RiverShown[card])")
+                            .resizable()
+                            .frame(width: 50, height: 75, alignment: .center)
+                    }
+                }
+                Text("Your Hand:")
+                HStack{
+                    ForEach(0..<yourHand.count, id: \.self){card in
+                        //                    Text("\(yourHand[card])")
+                        Image("\(yourHand[card])")
+                            .resizable()
+                            .frame(width: 50, height: 75, alignment: .center)
+                    }
+                }
+                //            Text("\(YourHandRank)")
+                Text("Current bet:$\(YourBet)")
+                HStack{
                     if RoundNum < 4{
                         
-                        Menu("Bet") {
-                            ForEach([50, 100, 150, 200], id: \.self) { amt in
-                                Button("$\(amt)") {
-                                    YourBet += amt
+                        
+                        Button("Call") {
+                            if RoundNum == 3{
+                                RateHands()
+                                AIHandVisual = AIHand
+                            }
+                            YourBet = AIBet
+                            NextRound()
+                        }
+                    }
+                    if RoundNum > 0{
+                        if RoundNum < 4{
+                            
+                            Menu("Bet") {
+                                ForEach([50, 100, 150, 200, 1000], id: \.self) { amt in
+                                    Button("$\(amt)") {
+                                        YourBet = AIBet
+                                        YourBet += amt
+                                        //                                    IsBetting = true
+                                        NextRound()
+                                    }
+                                    .buttonStyle(.borderedProminent)
                                 }
-                                .buttonStyle(.borderedProminent)
+                                
+                                
+                                
+                                
+                                
+                            }
+                            Button("Fold") {
+                                StartGame()
                             }
                             
-                            
-                            
-                            
-                            
                         }
-                        Button("Fold") {
-                            StartGame()
-                        }
-                        
+                    }
+                    
+                }
+                if RoundNum >= 4{
+                    Button("New Game") {
+                        StartGame()
                     }
                 }
+            }
+            .onAppear(){
+                StartGame()
                 
             }
-            if RoundNum >= 4{
-                Button("New Game") {
-                    StartGame()
-                }
-            }
-        }
-        .onAppear(){
-            StartGame()
             
         }
-        
     }
-    
     func StartGame(){
         cash -= YourBet
         YourHandRank = 0
         AIHandRank = 0
         RoundNum = 0
         YourBet = 0
+        AIBet = 0
         River = []
+        RiverShown = []
         cardPool = []
         yourHand = []
         AIHand = []
+        AIfolded = false
         AIHandVisual = ["BC","BC"]
         cardPool = ["CA","SA","HA","DA","CK","SK","HK","DK","CQ","SQ","HQ","DQ","CJ","SJ","HJ","DJ","C10","S10","H10","D10","C9","S9","H9","D9","C8","S8","H8","D8","C7","S7","H7","D7","C6","S6","H6","D6","C5","S5","H5","D5","C4","S4","H4","D4","C3","S3","H3","D3","C2","S2","H2","D2"]
         let card1 = Int.random(in: 1..<cardPool.count)
@@ -666,46 +693,73 @@ struct Poker: View {
     }
     
     func AIPlay(){
-        var RandomNum = Int.random(in: 1..<100)
-        
-        if AIHandRank >= 8 {
-            AIBet += 1000
+        let RandomNum = Int.random(in: 1..<100)
+        RateHands()
+        if RoundNum == 2{
+            
         }else{
-            
-            
-            if AIHandRank >= 6 {
-                if RandomNum < 10 {
-                    cash += AIBet
-                    YourBet = 0
-                    AIBet = 0
-                    StartGame()
-                    
-                }else{
-                    
-                    
-                    if RandomNum < 20 {
-                        AIBet += 100
-                        
-                    }else{
-                        AIBet += 1000
-                    }
-                }
+            if AIHandRank >= 8 {
+                AIBet += 10000
             }else{
-                if AIHandRank >= 4 {
-                    if RandomNum < 10 {
+                
+                
+                if AIHandRank >= 6 {
+                    if RandomNum < 2 {
                         cash += AIBet
                         YourBet = 0
                         AIBet = 0
-                        StartGame()
+                        AIfolded = true
                         
                     }else{
                         
                         
-                        if RandomNum < 60 {
+                        if RandomNum < 20 {
                             AIBet += 100
                             
                         }else{
                             AIBet += 1000
+                        }
+                    }
+                }else{
+                    if AIHandRank >= 4 {
+                        if RandomNum < 5 {
+                            cash += AIBet
+                            YourBet = 0
+                            AIBet = 0
+                            AIfolded = true
+                            
+                        }else{
+                            
+                            
+                            if RandomNum < 60 {
+                                AIBet += 500
+                                
+                            }else{
+                                AIBet += 1000
+                            }
+                        }
+                    }else{
+                        if RandomNum < 10 {
+                            cash += AIBet
+                            YourBet = 0
+                            AIBet = 0
+                            AIfolded = true
+                            
+                        }else{
+                            if RandomNum < 40 {
+                                
+                            }else{
+                                if RandomNum < 70 {
+                                    AIBet += 100
+                                }
+                                
+                                if RandomNum < 90 {
+                                    AIBet += 200
+                                    
+                                }else{
+                                    AIBet += 1000
+                                }
+                            }
                         }
                     }
                 }
@@ -724,17 +778,27 @@ struct Poker: View {
             let RiverCard3 = Int.random(in: 1..<cardPool.count)
             River.append(cardPool[RiverCard3])
             cardPool.remove(at: RiverCard3)
-            YourBet += 100
-        }
-        if RoundNum == 1{
             let RiverCard4 = Int.random(in: 1..<cardPool.count)
             River.append(cardPool[RiverCard4])
             cardPool.remove(at: RiverCard4)
-        }
-        if RoundNum == 2{
             let RiverCard5 = Int.random(in: 1..<cardPool.count)
             River.append(cardPool[RiverCard5])
             cardPool.remove(at: RiverCard5)
+            YourBet = 100
+            AIBet = YourBet
+            RiverShown = [River[0],River[1],River[2]]
+            AIPlay()
+        }
+        if RoundNum == 1{
+            AIBet = YourBet
+            RiverShown.append(River[3])
+            AIPlay()
+        }
+        if RoundNum == 2{
+            AIPlay()
+            RiverShown.append(River[4])
+            AIBet = YourBet
+            
         }
         
         RoundNum += 1

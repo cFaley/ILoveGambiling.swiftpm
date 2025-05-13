@@ -6,9 +6,7 @@ struct ContentView: View {
     
     var body: some View {
         ZStack{
-            Rectangle()
-                .fill()
-                .foregroundStyle(myColor)
+            myColor.ignoresSafeArea()
          
             ZStack{
                 
@@ -25,10 +23,7 @@ struct ContentView: View {
                             .foregroundStyle(myColor)
                         NavigationStack{
                             ZStack{
-                                Rectangle()
-                                    .fill()
-                                    .foregroundStyle(myColor)
-                                
+                                myColor.ignoresSafeArea()
                                 VStack{
                                     
                                     Image("gambilingMan")

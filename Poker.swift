@@ -49,8 +49,14 @@ struct Poker: View {
                 //                }
                 
                 Text("Cash:$\(cash)")
+                    .foregroundStyle(.white)
+                    .font(.title)
+                    
                 if AIfolded{
                     Text("AI Folds")
+                        .foregroundStyle(.white)
+                        .font(.title)
+                       
                         .onAppear(){
                             RoundNum = 5
                             AIHandVisual = AIHand
@@ -61,6 +67,9 @@ struct Poker: View {
                     
                     if YourHandRank > AIHandRank{
                         Text("You Win!")
+                            .foregroundStyle(.white)
+                            .font(.title)
+                            
                             .onAppear(){
                                 cash += YourBet
                                 YourBet = 0
@@ -68,6 +77,9 @@ struct Poker: View {
                     }
                     if AIHandRank > YourHandRank{
                         Text("AIWins")
+                            .foregroundStyle(.white)
+                            .font(.title)
+                           
                             .onAppear(){
                                 cash -= YourBet
                                 YourBet = 0
@@ -76,6 +88,9 @@ struct Poker: View {
                     if YourHandRank == AIHandRank{
                         if YourHighCard > AIHighCard{
                             Text("You Win!")
+                                .foregroundStyle(.white)
+                                .font(.title)
+                            
                                 .onAppear(){
                                     cash += YourBet
                                     YourBet = 0
@@ -83,6 +98,9 @@ struct Poker: View {
                         }
                         else{
                             Text("AIWins")
+                                .foregroundStyle(.white)
+                                .font(.title)
+                             
                                 .onAppear(){
                                     cash -= YourBet
                                     YourBet = 0
@@ -92,6 +110,9 @@ struct Poker: View {
                 }
                 //            Text("\(AIHandRank)")
                 Text("AI hand:")
+                    .foregroundStyle(.white)
+                    .font(.title)
+                   
                 
                 HStack{
                     ForEach(0..<AIHandVisual.count, id: \.self){card in
@@ -102,7 +123,13 @@ struct Poker: View {
                     }
                 }
                 Text("AI Bet:$\(AIBet)")
+                    .foregroundStyle(.white)
+                    .font(.title)
+                  
                 Text("river:")
+                    .foregroundStyle(.white)
+                    .font(.title)
+                 
                 HStack{
                     ForEach(0..<RiverShown.count, id: \.self){card in
                         //                    Text("\(River[card])")
@@ -112,6 +139,9 @@ struct Poker: View {
                     }
                 }
                 Text("Your Hand:")
+                    .foregroundStyle(.white)
+                    .font(.title)
+                   
                 HStack{
                     ForEach(0..<yourHand.count, id: \.self){card in
                         //                    Text("\(yourHand[card])")
@@ -122,6 +152,9 @@ struct Poker: View {
                 }
                 //            Text("\(YourHandRank)")
                 Text("Current bet:$\(YourBet)")
+                    .foregroundStyle(.white)
+                    .font(.title)
+                    
                 HStack{
                     if RoundNum < 4{
                         
@@ -134,6 +167,9 @@ struct Poker: View {
                             YourBet = AIBet
                             NextRound()
                         }
+                        .font(.title)
+                        .padding()
+                        
                     }
                     if RoundNum > 0{
                         if RoundNum < 4{
@@ -148,15 +184,14 @@ struct Poker: View {
                                     }
                                     .buttonStyle(.borderedProminent)
                                 }
-                                
-                                
-                                
-                                
-                                
                             }
+                            .font(.title)
+                            .padding()
                             Button("Fold") {
                                 StartGame()
                             }
+                            .font(.title)
+                            .padding()
                             
                         }
                     }
@@ -166,6 +201,8 @@ struct Poker: View {
                     Button("New Game") {
                         StartGame()
                     }
+                    .font(.title)
+                    .padding()
                 }
             }
             .onAppear(){

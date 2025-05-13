@@ -3,7 +3,7 @@ import SwiftUI
 struct ContentView: View {
     
     let myColor = Color(red: 107/255, green: 13/255, blue: 14/255)
-    
+    @AppStorage("cash") var cash: Int = 5000
     var body: some View {
         ZStack{
             myColor.ignoresSafeArea()
@@ -13,9 +13,14 @@ struct ContentView: View {
                 VStack {
                     Text("I Love Gambling❤️")
                         .foregroundStyle(.white)
-                        .padding()
+                        .font(.headline)
+                    
                     Text("Welcom to the CCC!!!")
                         .foregroundStyle(.white)
+                        .font(.headline)
+                    Text("Cash:\(cash)")
+                        .foregroundStyle(.white)
+                        .font(.title)
                     ZStack{
                         
                         Rectangle()
@@ -29,61 +34,76 @@ struct ContentView: View {
                                     Image("gambilingMan")
                                         .resizable()
                                         .scaledToFill()
-                                    
-                                    NavigationLink(destination: Slots()) {
-                                        ZStack{
-                                            Rectangle()
-                                                .fill()
-                                                .foregroundStyle(myColor)
-                                            RoundedRectangle(cornerRadius: 100)
-                                                .frame(width: 300, height: 75, alignment: .center)
-                                            Text("Slots")
-                                                .font(.largeTitle)
-                                                .foregroundStyle(.white)
+                                    HStack{
+                                        NavigationLink(destination: Slots()) {
+                                            ZStack{
+                                                //                                            Rectangle()
+                                                //                                                .fill()
+                                                //                                                .foregroundStyle(myColor)
+                                                //                                            RoundedRectangle(cornerRadius: 100)
+                                                //                                                .frame(width: 300, height: 75, alignment: .center)
+                                                //                                            Text("Slots")
+                                                //                                                .font(.largeTitle)
+                                                //                                                .foregroundStyle(.white)
+                                                Rectangle()
+                                                    .fill(.green.gradient)
+                                                    .frame(width: 175, height: 175, alignment: .center)
+                                                Image("SlotsButton")
+                                                    .resizable()
+                                                    .frame(width: 150, height: 150, alignment: .center)
+                                            }
+                                        }
+                                        
+                                        NavigationLink(destination: BlackJack()) {
+                                            ZStack{
+                                                //                                            Rectangle()
+                                                //                                                .fill()
+                                                //                                                .foregroundStyle(myColor)
+                                                //                                            RoundedRectangle(cornerRadius: 100)
+                                                //                                                .frame(width: 300, height: 75, alignment: .center)
+                                                //                                            Text("BlackJack")
+                                                //                                                .font(.largeTitle)
+                                                //                                                .foregroundStyle(.white)
+                                                Rectangle()
+                                                    .fill(.green.gradient)
+                                                    .frame(width: 175, height: 175, alignment: .center)
+                                                Image("BlackJackButton")
+                                                    .resizable()
+                                                    .frame(width: 150, height: 150, alignment: .center)
+                                                
+                                            }
                                         }
                                     }
-                                    
-                                    NavigationLink(destination: BlackJack()) {
-                                        ZStack{
-                                            Rectangle()
-                                                .fill()
-                                                .foregroundStyle(myColor)
-                                            RoundedRectangle(cornerRadius: 100)
-                                                .frame(width: 300, height: 75, alignment: .center)
-                                            Text("BlackJack")
-                                                .font(.largeTitle)
-                                                .foregroundStyle(.white)
-                                            
+                                    HStack{
+                                        NavigationLink(destination: Poker()) {
+                                            ZStack{
+                                                Rectangle()
+                                                    .fill(.green.gradient)
+                                                    .frame(width: 175, height: 175, alignment: .center)
+                                                Image("PokerButton")
+                                                    .resizable()
+                                                    .frame(width: 150, height: 150, alignment: .center)
+                                            }
                                         }
-                                    }
-                                    NavigationLink(destination: Poker()) {
-                                        ZStack{
-                                            Rectangle()
-                                                .fill()
-                                                .foregroundStyle(myColor)
-                                            RoundedRectangle(cornerRadius: 100)
-                                                .frame(width: 300, height: 75, alignment: .center)
-                                            Text("Poker")
-                                                .font(.largeTitle)
-                                                .foregroundStyle(.white)
-                                        }
-                                    }
-                                    NavigationLink(destination: Roulette()) {
-                                        ZStack{
-                                            RoundedRectangle(cornerRadius: 100)
-                                                .frame(width: 300, height: 75, alignment: .center)
-                                            Text("Roulette")
-                                                .font(.largeTitle)
-                                                .foregroundStyle(.white)
+                                        NavigationLink(destination: Roulette()) {
+                                            ZStack{
+                                                Rectangle()
+                                                    .fill(.green.gradient)
+                                                    .frame(width: 175, height: 175, alignment: .center)
+                                                Image("RouletteButton")
+                                                    .resizable()
+                                                    .frame(width: 150, height: 150, alignment: .center)
+                                            }
                                         }
                                     }
                                     NavigationLink(destination: DoubleOrNothing()) {
                                         ZStack{
-                                            RoundedRectangle(cornerRadius: 100)
-                                                .frame(width: 300, height: 75, alignment: .center)
-                                            Text("Double or Nothing")
-                                                .font(.largeTitle)
-                                                .foregroundStyle(.white)
+                                            Rectangle()
+                                                .fill(.green.gradient)
+                                                .frame(width: 175, height: 175, alignment: .center)
+                                            Image("DoubbleOrNothingButton")
+                                                .resizable()
+                                                .frame(width: 150, height: 150, alignment: .center)
                                         }
                                     }
                                 }

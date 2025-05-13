@@ -13,11 +13,11 @@ struct Slots: View {
         ZStack{
             myColor.ignoresSafeArea()
             VStack {
-                Text("Cash $\(cash)")
+               
                 HStack{
                     ZStack{
                         Rectangle()
-                            .foregroundStyle(.gray)
+                            .fill(.gray.gradient)
                         //                    Text("\(slot1)")
                         Image("Image\(slot1)")
                             .resizable()
@@ -27,7 +27,7 @@ struct Slots: View {
                     .frame(width: 100, height: 200, alignment: .leading)
                     ZStack{
                         Rectangle()
-                            .foregroundStyle(.gray)
+                            .fill(.gray.gradient)
                         //                    Text("\(slot2)")
                         Image("Image\(slot2)")
                             .resizable()
@@ -36,7 +36,8 @@ struct Slots: View {
                     .frame(width: 100, height: 200, alignment: .center)
                     ZStack{
                         Rectangle()
-                            .foregroundStyle(.gray)
+                            .fill(.gray.gradient)
+//                            .foregroundStyle(.gray)
                         //                    Text("\(slot3)")
                         Image("Image\(slot3)")
                             .resizable()
@@ -59,15 +60,17 @@ struct Slots: View {
                 } label: {
                     ZStack{
                         RoundedRectangle(cornerRadius: 100)
+                            .fill(.green.gradient)
                             .frame(width: 300, height: 100, alignment: .center)
                         Text("Spin!!!")
                             .font(.largeTitle)
-                            .foregroundStyle(.black)
+                            .foregroundStyle(.white)
                     }
                 }
                 Text("$100 Per Spin")
+                    .foregroundStyle(.white)
                     .font(.largeTitle)
-                Image("Chart1")
+                Image("Chart2")
                     .resizable()
                     .frame(width: 300, height: 200, alignment: .center)
             }

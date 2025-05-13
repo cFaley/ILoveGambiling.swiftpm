@@ -48,9 +48,7 @@ struct Poker: View {
                 //                    yourHand = ["H10","HA"]
                 //                }
                 
-                Text("Cash:$\(cash)")
-                    .foregroundStyle(.white)
-                    .font(.title)
+            
                     
                 if AIfolded{
                     Text("AI Folds")
@@ -113,13 +111,17 @@ struct Poker: View {
                     .foregroundStyle(.white)
                     .font(.title)
                    
-                
-                HStack{
-                    ForEach(0..<AIHandVisual.count, id: \.self){card in
-                        //                    Text("\(AIHand[card])")
-                        Image("\(AIHandVisual[card])")
-                            .resizable()
-                            .frame(width: 50, height: 75, alignment: .center)
+                ZStack{
+                    Rectangle()
+                        .fill(.gray.gradient)
+                        .frame(width: 125, height: 100, alignment: .center)
+                    HStack{
+                        ForEach(0..<AIHandVisual.count, id: \.self){card in
+                            //                    Text("\(AIHand[card])")
+                            Image("\(AIHandVisual[card])")
+                                .resizable()
+                                .frame(width: 50, height: 75, alignment: .center)
+                        }
                     }
                 }
                 Text("AI Bet:$\(AIBet)")
@@ -129,25 +131,34 @@ struct Poker: View {
                 Text("river:")
                     .foregroundStyle(.white)
                     .font(.title)
-                 
-                HStack{
-                    ForEach(0..<RiverShown.count, id: \.self){card in
-                        //                    Text("\(River[card])")
-                        Image("\(RiverShown[card])")
-                            .resizable()
-                            .frame(width: 50, height: 75, alignment: .center)
+                ZStack{
+                    Rectangle()
+                        .fill(.gray.gradient)
+                        .frame(width: 300, height: 100, alignment: .center)
+                    HStack{
+                        ForEach(0..<RiverShown.count, id: \.self){card in
+                            //                    Text("\(River[card])")
+                            Image("\(RiverShown[card])")
+                                .resizable()
+                                .frame(width: 50, height: 75, alignment: .center)
+                        }
                     }
                 }
                 Text("Your Hand:")
                     .foregroundStyle(.white)
                     .font(.title)
-                   
-                HStack{
-                    ForEach(0..<yourHand.count, id: \.self){card in
-                        //                    Text("\(yourHand[card])")
-                        Image("\(yourHand[card])")
-                            .resizable()
-                            .frame(width: 50, height: 75, alignment: .center)
+                ZStack{
+                    Rectangle()
+                        .fill(.gray.gradient)
+                        .frame(width: 125, height: 100, alignment: .center)
+                    
+                    HStack{
+                        ForEach(0..<yourHand.count, id: \.self){card in
+                            //                    Text("\(yourHand[card])")
+                            Image("\(yourHand[card])")
+                                .resizable()
+                                .frame(width: 50, height: 75, alignment: .center)
+                        }
                     }
                 }
                 //            Text("\(YourHandRank)")

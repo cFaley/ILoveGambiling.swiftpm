@@ -13,6 +13,7 @@ struct Roulette: View {
         29,7,28,12,35,3,26
     ]
     let segmentAngle = 9.72972972972973
+//    let segmentAngle = 9.52972972972973
     let redNumbers: Set<Int> = [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]
     
     @State var rotation: Double = 0
@@ -35,6 +36,7 @@ struct Roulette: View {
                     .foregroundStyle(.white)
                     .font(.title2)
                     .bold()
+                
                 
                 Text(gameMessage)
                     .foregroundStyle(.white)
@@ -192,7 +194,11 @@ struct Roulette: View {
                 .font(.title2)
                 .disabled(selectedBetAmount == nil || betChoice == .none)
             }
+            .foregroundStyle(.white)
+            .font(.headline)
         }
+        .foregroundStyle(.white)
+        .font(.headline)
     }
     
     func spinWheel() {

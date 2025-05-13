@@ -25,14 +25,17 @@ struct BlackJack: View {
             myColor.ignoresSafeArea()
             VStack(spacing: 20) {
                 Text(gameMessage)
-                    .font(.largeTitle)
+                    .foregroundStyle(.white)
+                    .font(.title)
                     .bold()
                     .padding()
                 
-                Text("Cash $\(cash)")
+             
                 VStack {
                     HStack{
                         Text("Your Hand: \( total(of: playerCards) )")
+                            .foregroundStyle(.white)
+                            .font(.title)
                     }
                     HStack {
                         ForEach(playerCards) { card in
@@ -43,6 +46,8 @@ struct BlackJack: View {
                 VStack {
                     HStack{
                         Text("Dealer's Hand: \( total(of: dealerCards) )")
+                            .foregroundStyle(.white)
+                            .font(.title)
                         
                     }
                     HStack {
@@ -55,17 +60,23 @@ struct BlackJack: View {
                     Button("Hit") {
                         hit()
                     }
+                    .foregroundStyle(.white)
+                    .font(.title)
                     .disabled(gamePhase != .playing)
                     
                     Button("Stand") {
                         stand()
                     }
+                    .foregroundStyle(.white)
+                    .font(.title)
                     .disabled(gamePhase != .playing)
                     
                 }
                 
                 HStack {
                     Text("Select a bet:")
+                        .foregroundStyle(.white)
+                        .font(.title)
                     Button("$50") {
                         place(bet: 50)
                         dealInitialCards()
@@ -100,8 +111,13 @@ struct BlackJack: View {
             .onAppear {
                 nextHand()
             }
+            .foregroundStyle(.white)
+            .font(.headline)
         }
+        .foregroundStyle(.white)
+        .font(.headline)
     }
+    
     
     func cardView(card: Card) -> some View {
         ZStack {

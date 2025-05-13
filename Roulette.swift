@@ -32,10 +32,12 @@ struct Roulette: View {
             myColor.ignoresSafeArea()
             VStack {
                 Text("Cash: $\(cash)")
+                    .foregroundStyle(.white)
                     .font(.title2)
                     .bold()
                 
                 Text(gameMessage)
+                    .foregroundStyle(.white)
                     .font(.headline)
                     .padding(.top)
                 
@@ -52,7 +54,6 @@ struct Roulette: View {
                 }
                 
                 HStack {
-                    // Amount menu
                     Menu(amountLabel) {
                         ForEach([50, 100, 150, 200], id: \.self) { amt in
                             Button("$\(amt)") {

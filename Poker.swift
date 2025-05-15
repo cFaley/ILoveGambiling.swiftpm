@@ -48,13 +48,13 @@ struct Poker: View {
                 //                    yourHand = ["H10","HA"]
                 //                }
                 
-            
-                    
+                
+                
                 if AIfolded{
                     Text("AI Folds")
                         .foregroundStyle(.white)
                         .font(.title)
-                       
+                    
                         .onAppear(){
                             RoundNum = 5
                             AIHandVisual = AIHand
@@ -67,7 +67,7 @@ struct Poker: View {
                         Text("You Win!")
                             .foregroundStyle(.white)
                             .font(.title)
-                            
+                        
                             .onAppear(){
                                 cash += YourBet
                                 YourBet = 0
@@ -77,7 +77,7 @@ struct Poker: View {
                         Text("AIWins")
                             .foregroundStyle(.white)
                             .font(.title)
-                           
+                        
                             .onAppear(){
                                 cash -= YourBet
                                 YourBet = 0
@@ -98,7 +98,7 @@ struct Poker: View {
                             Text("AIWins")
                                 .foregroundStyle(.white)
                                 .font(.title)
-                             
+                            
                                 .onAppear(){
                                     cash -= YourBet
                                     YourBet = 0
@@ -110,7 +110,7 @@ struct Poker: View {
                 Text("AI hand:")
                     .foregroundStyle(.white)
                     .font(.title)
-                   
+                
                 ZStack{
                     Rectangle()
                         .fill(.gray.gradient)
@@ -127,7 +127,7 @@ struct Poker: View {
                 Text("AI Bet:$\(AIBet)")
                     .foregroundStyle(.white)
                     .font(.title)
-                  
+                
                 Text("river:")
                     .foregroundStyle(.white)
                     .font(.title)
@@ -165,7 +165,7 @@ struct Poker: View {
                 Text("Current bet:$\(YourBet)")
                     .foregroundStyle(.white)
                     .font(.title)
-                    
+                
                 HStack{
                     if RoundNum < 4{
                         

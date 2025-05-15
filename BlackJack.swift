@@ -30,7 +30,7 @@ struct BlackJack: View {
                     .bold()
                     .padding()
                 
-             
+                
                 VStack {
                     HStack{
                         Text("Your Hand: \( total(of: playerCards) )")

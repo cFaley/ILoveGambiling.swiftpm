@@ -8,11 +8,11 @@ struct MyApp: App {
     }
     
     @StateObject var gameState = GameState()
-
-      var body: some Scene {
-          WindowGroup {
-              ContentView()
+    
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
                 .environmentObject(gameState)
-          }
-      }
-  }
+        }
+    }
+}

@@ -4,8 +4,8 @@ struct Slots: View {
     @State var slot1 = 0
     @State var slot2 = 0
     @State var slot3 = 0
-//    @State var IsSpinning = true
-//    @State var count = 0
+    //    @State var IsSpinning = true
+    //    @State var count = 0
     @AppStorage("cash") var cash: Int = 5000
     @State var canSpin = true
     let myColor = Color(red: 107/255, green: 13/255, blue: 14/255)
@@ -13,7 +13,7 @@ struct Slots: View {
         ZStack{
             myColor.ignoresSafeArea()
             VStack {
-               
+                
                 HStack{
                     ZStack{
                         Rectangle()
@@ -37,7 +37,7 @@ struct Slots: View {
                     ZStack{
                         Rectangle()
                             .fill(.gray.gradient)
-//                            .foregroundStyle(.gray)
+                        //                            .foregroundStyle(.gray)
                         //                    Text("\(slot3)")
                         Image("Image\(slot3)")
                             .resizable()
@@ -102,7 +102,7 @@ struct Slots: View {
                     
                 }
             }
-                
+            
         }
     }
     
@@ -110,15 +110,15 @@ struct Slots: View {
     func Spin() {
         Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { timer in
             let randomNumber = Int.random(in: 1...20)
-//            print("Number: \(randomNumber)")
-
+            //            print("Number: \(randomNumber)")
+            
             DispatchQueue.main.async {
                 self.canSpin = false
                 self.slot1 = Int.random(in: 1..<7)
                 self.slot2 = Int.random(in: 1..<7)
                 self.slot3 = Int.random(in: 1..<7)
             }
-
+            
             if randomNumber == 10 {
                 DispatchQueue.main.async {
                     self.canSpin = true

@@ -204,7 +204,7 @@ struct Roulette: View {
         let targetIndex = Int.random(in: 0..<pockets.count)
         let pocketCenter = Double(targetIndex) * segmentAngle + (segmentAngle / 2)
         let landingOffset = 360 - pocketCenter
-        rotation = 5 * 360 + landingOffset
+        rotation += 5 * 360 + landingOffset
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
             let raw = rotation.truncatingRemainder(dividingBy: 360)

@@ -4,6 +4,7 @@ struct ContentView: View {
     
     let myColor = Color(red: 107/255, green: 13/255, blue: 14/255)
     @AppStorage("cash") var cash: Int = 5000
+    @AppStorage("loanSharkAnger") var loanSharkAnger: Int = 0
     var body: some View {
         ZStack{
             myColor.ignoresSafeArea()
@@ -11,16 +12,28 @@ struct ContentView: View {
             ZStack{
                 
                 VStack {
-                    Text("I Love Gambling❤️")
+                    Text("I Love Gambling ❤️")
                         .foregroundStyle(.white)
                         .font(.headline)
                     
                     Text("Welcom to the CCC!!!")
                         .foregroundStyle(.white)
                         .font(.headline)
+                    HStack {
                     Text("Cash:\(cash)")
                         .foregroundStyle(.white)
-                        .font(.title)
+                        .font(.title2)
+                        .bold()
+                    Text("Angry Loan Sharks: \(loanSharkAnger)")
+                        .foregroundStyle(.white)
+                        .font(.title2)
+                        .bold()
+                }
+                    Button("Reset Money") {
+                           cash = 5000
+                           loanSharkAnger += 1
+                       }
+                       .buttonStyle(.bordered)
                     ZStack{
                         
                         Rectangle()
